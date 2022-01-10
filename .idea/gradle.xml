@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/components/inspectit-ocelot-configurationserver" />
+            <option value="$PROJECT_DIR$/components/inspectit-ocelot-eum-server" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-agent" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-bootstrap" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-config" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-core" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-demo" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-documentation" />
+            <option value="$PROJECT_DIR$/inspectit-ocelot-sdk" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
