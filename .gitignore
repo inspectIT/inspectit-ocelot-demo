@@ -31,4 +31,4 @@
 /.nb-gradle/
 
 /working_directory/
-*/configuration-server/users.db
+**/configuration-server/users.db
