@@ -1,0 +1,48 @@
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otelcol-sidecar
+spec:
+  mode: sidecar
+  config: |
+    receivers:
+      otlp:
+        protocols:
+           grpc:
+           http:
+      jaeger:
+        protocols:
+          grpc:
+          thrift_binary:
+          thrift_http:
+          thrift_compact:
+    exporters:
+      otlp:
+        endpoint: "otel-collector.otel.svc.cluster.local:4317"
+        tls:
+          insecure: true
+      logging:
+    processors:
+      batch:
+      memory_limiter:
+       # 80% of maximum memory up to 2G
+       limit_mib: 400
+       # 25% of limit up to 2G
+       spike_limit_mib: 100
+       check_interval: 5s
+    extensions:
+      zpages: {}
+      memory_ballast:
+        # Memory Ballast size should be max 1/3 to 1/2 of memory.
+        size_mib: 165
+    service:
+      extensions: [zpages, memory_ballast]
+      pipelines:
+        traces:
+          receivers: [otlp, jaeger]
+          processors: [memory_limiter, batch]
+          exporters: [otlp, logging]
+      telemetry:
+        logs:
+          level: "info"
