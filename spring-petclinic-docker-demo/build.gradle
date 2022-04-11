@@ -6,7 +6,7 @@ task setVersionForDockerCompose(type: Copy) {
 
 task packageDemo(type: Zip) {
     dependsOn 'setVersionForDockerCompose'
-    archiveName = "inspectit-ocelot-demo-${version}.zip"
+    archiveName = "inspectit-ocelot-spring-petclinic-docker-demo-${version}.zip"
     destinationDir = file(buildDir)
 
     from (projectDir){
