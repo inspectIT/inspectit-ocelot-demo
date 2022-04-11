@@ -1,0 +1,7 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: inspectit-ocelot-instrumentation
+spec:
+  java:
+    image: inspectit/inspectit-ocelot-agent:1.15.2
