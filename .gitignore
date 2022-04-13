@@ -31,4 +31,4 @@
 /.nb-gradle/
 
 /working_directory/
-**/configuration-server/users.db
+spring-petclinic-docker-demo-gradle/configuration-server/users.db

@@ -1,0 +1,142 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: trading-demo
+  labels:
+    name: trading-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: trading-demo-backend
+  name: trading-demo-backend
+  namespace: trading-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trading-demo-backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: trading-demo-backend
+      annotations:
+        # inject an instrumentation that has been deployed in the same namespace
+        instrumentation.opentelemetry.io/inject-java: "true"
+    spec:
+      containers:
+        - image: inspectit/trading-demo
+          name: trading-demo-backend
+          resources: {}
+          env:
+            - name: INSPECTIT_CONFIG_HTTP_URL
+              value: "http://inspectit-ocelot-configurationserver.inspectit-ocelot.svc.cluster.local:8090/api/v1/agent/configuration"
+            - name: INSPECTIT_SERVICE_NAME
+              value: trading-demo-backend
+status: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  creationTimestamp: null
+  name: ingress
+  namespace: trading-demo
+spec:
+  defaultBackend:
+    service:
+      name: trading-demo-backend
+      port:
+        number: 8080
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: trading-demo-backend
+  name: trading-demo-backend
+  namespace: trading-demo
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: trading-demo-backend
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: trading-demo-frontend
+  name: trading-demo-frontend
+  namespace: trading-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trading-demo-frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: trading-demo-frontend
+      annotations:
+        # inject an instrumentation that has been deployed in the same namespace
+        instrumentation.opentelemetry.io/inject-java: "true"
+    spec:
+      containers:
+        - image: inspectit/trading-demo
+          name: trading-demo-frontend
+          resources: {}
+          env:
+            - name: INSPECTIT_CONFIG_HTTP_URL
+              value: "http://inspectit-ocelot-configurationserver.inspectit-ocelot.svc.cluster.local:8090/api/v1/agent/configuration"
+            - name: BACKEND_URL
+              value: http://trading-demo-backend:8080
+            - name: INSPECTIT_SERVICE_NAME
+              value: trading-demo-frontend
+status: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  creationTimestamp: null
+  name: ingress
+  namespace: trading-demo
+spec:
+  defaultBackend:
+    service:
+      name: trading-demo-frontend
+      port:
+        number: 8080
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: trading-demo-frontend
+  name: trading-demo-frontend
+  namespace: trading-demo
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: trading-demo-frontend
+status:
+  loadBalancer: {}

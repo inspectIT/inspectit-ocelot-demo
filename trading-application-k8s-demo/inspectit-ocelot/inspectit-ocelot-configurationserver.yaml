@@ -1,0 +1,109 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: inspectit-ocelot
+  labels:
+    name: inspectit-ocelot
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inspectit-ocelot-configurationserver-conf
+  namespace: inspectit-ocelot
+  labels:
+    app: inspectit-ocelot-configurationserver
+    component: inspectit-ocelot-configurationserver-conf
+data:
+  inspectit-ocelot-configurationserver-config: |
+    inspectit:
+      exporters:
+        tracing:
+          jaeger:
+            enabled: ENABLED
+            # when the OTEL collector agent is injected as a sidecar, we can go with 'localhost'
+            url: http://localhost:14268/api/traces
+            # when the OTEL collector is deployed as an deployment, we need to address it directly
+            #url: http://otel-collector.otel.svc.cluster.local:14268/api/traces
+      instrumentation:
+        rules:
+          r_method_configuration_trace:
+            include:
+              r_trace_method: true
+            scopes:
+              s_trading_demo_frontend_public: true
+              s_trading_demo_backend_ExchangeController: true
+          r_method_configuration_duration:
+            include:
+              r_method_metric: true
+            scopes: {}
+
+        scopes:
+          s_trading_demo_frontend_public:
+            type:
+              name: rocks.inspectit.demo.frontend
+              matcher-mode: STARTS_WITH
+            methods:
+              - visibility: PUBLIC
+          s_trading_demo_backend_ExchangeController:
+            type:
+              name: rocks.inspectitdemo.backend.ExchangeController
+              matcher-mode: STARTS_WITH
+            methods:
+              - visibility: PUBLIC
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: inspectit-ocelot-configurationserver
+  name: inspectit-ocelot-configurationserver
+  namespace: inspectit-ocelot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inspectit-ocelot-configurationserver
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: inspectit-ocelot-configurationserver
+    spec:
+      containers:
+        - image: inspectit/inspectit-ocelot-configurationserver
+          name: inspectit-ocelot-configurationserver
+          resources: {}
+          command: ["/bin/sh", "-c"]
+          args: ["mkdir -p /working_directory/files/trading-demo && cp /tmp/trading-demo-config.yaml /working_directory/files/trading-demo/trading-demo-config.yaml && sh /entrypoint.sh"]
+          env:
+            - name: INSPECTIT_CONFIG_SERVER_DEFAULT_USER_PASSWORD
+              value: "demo"
+          volumeMounts:
+            - name: inspectit-ocelot-configurationserver-config-vol
+              mountPath: /tmp/trading-demo-config.yaml
+              subPath: trading-demo-config.yaml
+      volumes:
+        - configMap:
+            name: inspectit-ocelot-configurationserver-conf
+            items:
+              - key: inspectit-ocelot-configurationserver-config
+                path: trading-demo-config.yaml
+          name: inspectit-ocelot-configurationserver-config-vol
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: inspectit-ocelot-configurationserver
+  name: inspectit-ocelot-configurationserver
+  namespace: inspectit-ocelot
+spec:
+  ports:
+    - port: 8090
+      protocol: TCP
+      targetPort: 8090
+  selector:
+    app: inspectit-ocelot-configurationserver
+status:
+  loadBalancer: {}
