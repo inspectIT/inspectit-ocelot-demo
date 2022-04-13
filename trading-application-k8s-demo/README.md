@@ -135,9 +135,9 @@ In this example, we will deploy the OpenTelemetryCollector as a `deployment` tha
 
 ### 1. The OpenTelemetry Collector as  `Deployment`
 
-The OpenTelemetry Collector as `Deployment` will be used to receive traces send via Jaeger or OTLP, processes the traces, and exports them to our Jaeger collector and to system out (logging).
+The OpenTelemetry Collector as `Deployment` will be used to receive traces sent via Jaeger or OTLP, process the traces, and export them to our Jaeger collector and to system out (logging).
 
-* The yaml file `./otel-collector.yaml` deploys the OpenTelemetry Collector as a `Deployment` in the namespace `otel`. 
+* The file `./otel-collector.yaml` deploys the OpenTelemetry Collector as a `Deployment` in the namespace `otel`. 
 
   1. Deploy the OpenTelemetry Collector `deployment` in the namespace `otel`
 
@@ -423,7 +423,7 @@ Following the [official readme](https://inspectit.github.io/inspectit-ocelot/doc
 
 We will deploy the inspectIT Ocelot Configuration Server following the [official readme](https://github.com/inspectIT/inspectit-ocelot/tree/master/components/inspectit-ocelot-configurationserver/k8s).
 
-You can find the file in `./inspectit/inspectit-ocelot-configurationserver.yaml`
+You can find the file in `./inspectit-ocelot/inspectit-ocelot-configurationserver.yaml`
 
 1. Deploy the inspectIT Ocelot Configuration Server in the `inspectit-ocelot` namespace:
     ```shell
@@ -648,4 +648,4 @@ When you have executed some queries on the frontend, visit the Jaeger UI on [htt
   3. Visit the [Jaeger UI](http://localhost:16686) and verify that traces from the trading-demo-backend and trading-demo-frontend are received
 
      * for the request [http://localhost:8080/quote?coin=BTC&amount=1.25](http://localhost:8080/quote?coin=BTC&amount=1.25), the traces for the trading-demo-frontend should look similar to this:
-       ![Jaeger UI](.\images\jaeger-traces.png)
+       ![Jaeger UI](./images/jaeger-traces.png)
