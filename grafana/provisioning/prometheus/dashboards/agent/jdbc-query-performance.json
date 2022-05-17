@@ -1,0 +1,314 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1627998053556,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": "LocalPrometheus",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "panels": [],
+      "repeat": "db_url",
+      "title": "JDBC Query Performance of $db_url",
+      "type": "row"
+    },
+    {
+      "datasource": "LocalPrometheus",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "id": 25,
+      "maxPerRow": 4,
+      "options": {
+        "content": "<h2 style=\"text-align: center\">Queries Sent by ${service}</h2>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.3.5",
+      "repeat": "service",
+      "repeatDirection": "h",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": "LocalPrometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 3
+      },
+      "id": 17,
+      "maxPerRow": 4,
+      "options": {
+        "displayMode": "basic",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.3.5",
+      "repeat": "service",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "expr": "(sum(increase(jdbc_query_duration_sum{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
+          "interval": "",
+          "legendFormat": "{{$sql_command}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Avg. Query Duration ($service)",
+      "type": "bargauge"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "LocalPrometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 11
+      },
+      "hiddenSeries": false,
+      "id": 19,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "maxPerRow": 4,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.5",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "repeat": "service",
+      "repeatDirection": "h",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "(sum(increase(jdbc_query_duration_sum{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
+          "interval": "",
+          "legendFormat": "{{sql_command}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Query Duration over Time ($service)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:642",
+          "format": "ms",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:643",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": "LocalPrometheus",
+        "definition": "label_values(jdbc_url)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "DB",
+        "multi": true,
+        "name": "db_url",
+        "options": [],
+        "query": "label_values(jdbc_url)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": "LocalPrometheus",
+        "definition": "label_values(jdbc_query_duration_sum, service)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Calling Service",
+        "multi": true,
+        "name": "service",
+        "options": [],
+        "query": "label_values(jdbc_query_duration_sum, service)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "LocalPrometheus",
+        "definition": "label_values(sql_command)",
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Command",
+        "multi": true,
+        "name": "command",
+        "options": [],
+        "query": "label_values(sql_command)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "JDBC Query Performance",
+  "uid": "vyCYBbg7z",
+  "version": 6
+}
