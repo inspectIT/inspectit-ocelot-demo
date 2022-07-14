@@ -1,0 +1,17 @@
+{
+  "id": 3,
+  "uid": "GgZ3L367k",
+  "orgId": 1,
+  "name": "Jaeger",
+  "type": "jaeger",
+  "typeName": "Jaeger",
+  "typeLogoUrl": "public/app/plugins/datasource/jaeger/img/jaeger_logo.svg",
+  "access": "proxy",
+  "url": "http://openapm-demo.novatec-apm.de:16686/",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "isDefault": false,
+  "jsonData": {},
+  "readOnly": false
+}
