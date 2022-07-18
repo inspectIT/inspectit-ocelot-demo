@@ -15,12 +15,13 @@ services:
 
   ##  Fetches the configuration
   ocelot-config-server:
+    restart: always
     image: inspectit/inspectit-ocelot-configurationserver:${INSPECTIT_OCELOT_VERSION}
     container_name: ocelot-config-server
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
     environment:
       - INSPECTIT_CONFIG_SERVER_WORKING_DIRECTORY=/configuration-server
       - INSPECTIT_CONFIG_SERVER_DEFAULT_USER_PASSWORD=demo
@@ -31,6 +32,7 @@ services:
 
   ## Self Monitoring
   ocelot-eum-server:
+    restart: always
     image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_VERSION}
     container_name: ocelot-eum-server
     hostname: ocelot-eum-server
@@ -43,7 +45,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
     volumes:
       - ./eum-server:/eum-server
     ports:
@@ -52,6 +54,7 @@ services:
 
   #  Petclinic
   config-server:
+    restart: always
     image: inspectit/spring-petclinic-config-server:${INSPECTIT_PETCLINIC_VERSION}
     container_name: config-server
     hostname: config-server
@@ -64,7 +67,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
     depends_on:
       - agent
       - ocelot-config-server
@@ -76,6 +79,7 @@ services:
       - 9096:9096
 
   discovery-server:
+    restart: always
     image: inspectit/spring-petclinic-discovery-server:${INSPECTIT_PETCLINIC_VERSION}
     container_name: discovery-server
     hostname: discovery-server
@@ -88,7 +92,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
     depends_on:
       - agent
       - ocelot-config-server
@@ -101,6 +105,7 @@ services:
       - 9095:9095
 
   customers-service:
+    restart: always
     image: inspectit/spring-petclinic-customers-service:${INSPECTIT_PETCLINIC_VERSION}
     container_name: customers-service
     hostname: customers-service
@@ -113,7 +118,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
     depends_on:
       - agent
       - ocelot-config-server
@@ -127,6 +132,7 @@ services:
       - 9091:9091
 
   visits-service:
+    restart: always
     image: inspectit/spring-petclinic-visits-service:${INSPECTIT_PETCLINIC_VERSION}
     container_name: visits-service
     hostname: visits-service
@@ -139,7 +145,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
     depends_on:
       - agent
       - ocelot-config-server
@@ -153,6 +159,7 @@ services:
       - 9092:9092
 
   vets-service:
+    restart: always
     image: inspectit/spring-petclinic-vets-service:${INSPECTIT_PETCLINIC_VERSION}
     container_name: vets-service
     hostname: vets-service
@@ -165,7 +172,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
     depends_on:
       - agent
       - ocelot-config-server
@@ -179,6 +186,7 @@ services:
       - 9093:9093
 
   api-gateway:
+    restart: always
     image: inspectit/spring-petclinic-api-gateway:${INSPECTIT_PETCLINIC_VERSION}
     container_name: api-gateway
     hostname: api-gateway
@@ -191,12 +199,13 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
     depends_on:
       - agent
       - ocelot-config-server
       - config-server
       - discovery-server
+
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
     volumes:
       - agent-vol:/agent
@@ -209,6 +218,7 @@ services:
   #  Load Generator
   ## Artificial load on Demo
   load:
+    restart: always
     image: inspectit/spring-petclinic-load:1.0
     container_name: load-generator
     hostname: load-generator
@@ -216,6 +226,7 @@ services:
   #  Prometheus
   ## Time Series Database & Monitoring
   prometheus:
+    restart: always
     image: prom/prometheus:v2.29.1
     container_name: prometheus
     volumes:
@@ -226,6 +237,7 @@ services:
   #  Jaeger
   ## Collects and visualizes traces
   jaeger:
+    restart: always
     image: jaegertracing/all-in-one:1.25.0
     container_name: jaeger
     ports:
@@ -234,7 +246,8 @@ services:
   #  Grafana
   ## Dashboarding
   grafana:
-    image: grafana/grafana:8.0.6
+    restart: always
+    image: grafana/grafana:9.0.2
     container_name: grafana
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=TRUE
