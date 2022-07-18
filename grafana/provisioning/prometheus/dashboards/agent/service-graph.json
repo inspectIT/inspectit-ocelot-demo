@@ -4,27 +4,39 @@
       {
         "$$hashKey": "object:1388",
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1629203833400,
+  "iteration": 1657718161879,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "datasource": "LocalPrometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "gridPos": {
-        "h": 19,
-        "w": 23,
+        "h": 32,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -36,18 +48,18 @@
         "dataMapping": {
           "aggregationType": "service",
           "baselineRtUpper": "threshold",
-          "errorRateColumn": "error_in",
-          "errorRateOutgoingColumn": "error_out",
-          "extOrigin": "",
-          "extTarget": "",
-          "requestRateColumn": "in_count",
-          "requestRateOutgoingColumn": "out_count",
-          "responseTimeColumn": "in_timesum",
-          "responseTimeOutgoingColumn": "out_timesum",
-          "showDummyData": true,
+          "errorRateColumn": "Value #E",
+          "errorRateOutgoingColumn": "Value #D",
+          "extOrigin": "origin_external",
+          "extTarget": "target_external",
+          "requestRateColumn": "Value #A",
+          "requestRateOutgoingColumn": "Value #B",
+          "responseTimeColumn": "Value #C",
+          "responseTimeOutgoingColumn": "Value #F",
+          "showDummyData": false,
           "sourceColumn": "origin_service",
           "targetColumn": "target_service",
-          "type": ""
+          "type": "type"
         },
         "drillDownLink": "",
         "dummyDataSwitch": {
@@ -148,7 +160,11 @@
       "pluginVersion": "4.0.2",
       "targets": [
         {
-          "expr": "sum(increase(service_in_count{service=~\"$service\"}[$__range]) or increase(service_in_count{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "expr": "sum(increase(service_in_count_total{service=~\"$service\"}[$__range]) or increase(service_in_count_total{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -157,7 +173,11 @@
           "refId": "A"
         },
         {
-          "expr": "sum(increase(service_out_count{service=~\"$service\"}[$__range]) or increase(service_out_count{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "expr": "sum(increase(service_out_count_total{service=~\"$service\"}[$__range]) or increase(service_out_count_total{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -166,7 +186,11 @@
           "refId": "B"
         },
         {
-          "expr": "sum(increase(service_in_responsetime_sum{service=~\"$service\"}[$__range]) or increase(service_in_responsetime_sum{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "expr": "sum(increase(service_in_responsetime_sum_total{service=~\"$service\"}[$__range]) or increase(service_in_responsetime_sum_total{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -175,7 +199,11 @@
           "refId": "C"
         },
         {
-          "expr": "sum(increase(service_out_responsetime_sum{service=~\"$service\"}[$__range]) or increase(service_out_responsetime_sum{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "expr": "sum(increase(service_out_responsetime_sum_total{service=~\"$service\"}[$__range]) or increase(service_out_responsetime_sum_total{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -184,7 +212,11 @@
           "refId": "D"
         },
         {
-          "expr": "sum(increase(service_in_count{service=~\"$service\",error=\"true\"}[$__range]) or increase(service_in_count{origin_service=~\"$service\",error=\"true\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "expr": "sum(increase(service_in_count_total{service=~\"$service\",error=\"true\"}[$__range]) or increase(service_in_count_total{origin_service=~\"$service\",error=\"true\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -192,7 +224,11 @@
           "refId": "E"
         },
         {
-          "expr": "sum(increase(service_out_count{service=~\"$service\",error=\"true\"}[$__range]) or increase(service_out_count{target_service=~\"$service\",error=\"true\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "expr": "sum(increase(service_out_count_total{service=~\"$service\",error=\"true\"}[$__range]) or increase(service_out_count_total{target_service=~\"$service\",error=\"true\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -205,22 +241,18 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 30,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
           "text": "service",
           "value": "service"
         },
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "aggregationType",
         "options": [
@@ -245,10 +277,11 @@
             "$__all"
           ]
         },
-        "datasource": "LocalPrometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P93B0DC4442ABD976"
+        },
         "definition": "label_values(service)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Services",
@@ -302,5 +335,6 @@
   "timezone": "",
   "title": "Service Graph",
   "uid": "FlzDnieiz",
-  "version": 1
+  "version": 2,
+  "weekStart": ""
 }
