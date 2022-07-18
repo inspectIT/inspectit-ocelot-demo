@@ -263,7 +263,7 @@ services:
 
     ports:
       - 3000:3000
-      -
+
   # Grafana Loki & Promtail
   ## Make logs available in Grafana
   loki:
