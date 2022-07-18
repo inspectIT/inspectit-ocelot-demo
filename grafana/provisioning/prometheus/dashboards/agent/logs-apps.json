@@ -28,7 +28,7 @@
   "gnetId": 13639,
   "graphTooltip": 0,
   "id": 7,
-  "iteration": 1658139684532,
+  "iteration": 1658144445585,
   "links": [
     {
       "$$hashKey": "object:59",
@@ -42,13 +42,16 @@
       "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{job=\\\"$app\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
     },
     {
-      "$$hashKey": "object:61",
-      "icon": "external link",
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
       "tags": [],
       "targetBlank": true,
-      "title": "Learn LogQL",
+      "title": "Traces",
+      "tooltip": "",
       "type": "link",
-      "url": "https://grafana.com/docs/loki/latest/logql/"
+      "url": "/d/4GYTDFRVk/traces?orgId=1"
     }
   ],
   "liveNow": false,
@@ -218,7 +221,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "config-server",
           "value": "config-server"
         },
@@ -300,6 +303,6 @@
   "timezone": "",
   "title": "Logs / App",
   "uid": "sadlil-loki-apps-dashboard",
-  "version": 5,
+  "version": 7,
   "weekStart": ""
 }
