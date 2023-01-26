@@ -27,3 +27,21 @@ datasources:
     type: loki
     access: proxy
     url: http://loki:3100
+  - orgId: 1
+    name: LocalInflux
+    type: influxdb
+    typeName: InfluxDB
+    typeLogoUrl: public/app/plugins/datasource/influxdb/img/influxdb_logo.svg
+    access: proxy
+    url: http://influxdb:8086
+    database: inspectit
+    readOnly: false
+  - orgId: 1
+    name: InfluxDB-EUM
+    type: influxdb
+    typeName: InfluxDB
+    typeLogoUrl: public/app/plugins/datasource/influxdb/img/influxdb_logo.svg
+    access: proxy
+    url: http://influxdb:8086
+    database: inspectit_eum
+    readOnly: false
