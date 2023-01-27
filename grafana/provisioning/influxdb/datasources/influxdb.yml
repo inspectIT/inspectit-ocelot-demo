@@ -10,18 +10,6 @@ datasources:
       tracesToLogs:
         datasourceUid: K1XkGKR4z
   - orgId: 1
-    version: 1
-    name: LocalPrometheus
-    type: prometheus
-    access: proxy
-    url: http://prometheus:9090
-    jsonData:
-      timeInterval: 15s
-    secureJsonData:
-      tlsCACert: $LOCALPROMETHEUS_TLSCACERT
-      tlsClientCert: $LOCALPROMETHEUS_TLSCLIENTCERT
-      tlsClientKey: $LOCALPROMETHEUS_TLSCLIENTKEY
-  - orgId: 1
     version: 3
     name: Loki
     type: loki
