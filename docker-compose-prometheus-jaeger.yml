@@ -41,7 +41,6 @@ services:
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_PROMETHEUS_PORT=9097
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_PROMETHEUS_HOST=0.0.0.0
       - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_JAEGER_GRPC=jaeger:14250
-
     deploy:
       resources:
         limits:
@@ -63,7 +62,8 @@ services:
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9096
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -88,7 +88,8 @@ services:
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9095
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -114,7 +115,8 @@ services:
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -141,7 +143,8 @@ services:
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9092
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -168,7 +171,8 @@ services:
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9093
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -195,7 +199,8 @@ services:
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9094
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -227,7 +232,7 @@ services:
   ## Time Series Database & Monitoring
   prometheus:
     restart: always
-    image: prom/prometheus:v2.51.0
+    image: prom/prometheus:v2.45.0
     container_name: prometheus
     command:
       - '--storage.tsdb.retention.time=7d'

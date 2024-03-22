@@ -4,7 +4,10 @@
       {
         "$$hashKey": "object:181",
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -14,15 +17,17 @@
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1588836480547,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": {
+        "type": "jaeger",
+        "uid": "PC9A941E8F2E49454"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -32,34 +37,63 @@
       "id": 2,
       "panels": [],
       "repeat": "service",
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
+      "targets": [
+        {
+          "datasource": {
+            "type": "jaeger",
+            "uid": "PC9A941E8F2E49454"
+          },
+          "refId": "A"
         }
-      },
+      ],
       "title": "$service",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 3,
-      "format": "percentunit",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 3,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 10
+              },
+              {
+                "color": "#d44a3a",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "percentunit",
+          "unitScale": true
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -68,49 +102,30 @@
         "y": 1
       },
       "id": 4,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
+      "pluginVersion": "10.3.5",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_instrumented_classes{service=\"$service\"} / jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
           "instant": true,
@@ -120,22 +135,15 @@
           "resultFormat": "time_series"
         }
       ],
-      "thresholds": "10,30",
       "title": "Instr. Scope",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
+      "type": "gauge"
     },
     {
       "columns": [],
-      "datasource": "LocalPrometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "fontSize": "120%",
       "gridPos": {
         "h": 6,
@@ -145,14 +153,6 @@
       },
       "id": 47,
       "links": [],
-      "pageSize": null,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
-      },
       "scroll": true,
       "showHeader": true,
       "sort": {
@@ -170,7 +170,6 @@
         {
           "alias": "Description",
           "align": "auto",
-          "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
             "rgba(237, 129, 40, 0.89)",
@@ -187,7 +186,6 @@
         {
           "alias": "Count",
           "align": "auto",
-          "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
             "rgba(237, 129, 40, 0.89)",
@@ -204,7 +202,6 @@
         {
           "alias": "",
           "align": "auto",
-          "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
             "rgba(237, 129, 40, 0.89)",
@@ -220,6 +217,10 @@
       "targets": [
         {
           "alias": "# classes loaded by JVM",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
@@ -255,6 +256,10 @@
         },
         {
           "alias": "# instrumented classes",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_instrumentation_queue_size{service=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
@@ -290,6 +295,10 @@
         },
         {
           "alias": "# classes pending for analysis",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
@@ -324,6 +333,10 @@
           ]
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_logs{service=\"$service\",level=\"ERROR\"}",
           "format": "time_series",
           "instant": true,
@@ -332,6 +345,10 @@
           "refId": "D"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_logs{service=\"$service\",level=\"WARN\"}",
           "format": "time_series",
           "instant": true,
@@ -342,28 +359,52 @@
       ],
       "title": "Instrumentation State",
       "transform": "timeseries_to_rows",
-      "type": "table"
+      "type": "table-old"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorPostfix": false,
-      "colorValue": false,
-      "colors": [
-        "rgb(33, 33, 36)",
-        "#890f02",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 0,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "description": "Number of newly logged errors. This metric can display too low numbers in case the agent just restarted!",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "rgb(33, 33, 36)",
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(33, 33, 36)",
+                "value": null
+              },
+              {
+                "color": "#890f02",
+                "value": 1
+              },
+              {
+                "color": "#299c46"
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": true
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 2,
@@ -372,89 +413,86 @@
         "y": 1
       },
       "id": 76,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "$$hashKey": "object:291",
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "$$hashKey": "object:292",
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": " ",
-      "postfixFontSize": "30%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
+      "pluginVersion": "10.3.5",
       "targets": [
         {
-          "expr": "sum(increase(inspectit_self_logs{service=~\"$service\",level=~\"FATAL|ERROR\"}[$__range]))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"FATAL|ERROR\"}[$__range]))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1",
       "title": "Errors",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "$$hashKey": "object:294",
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#d44a3a",
-        "rgba(237, 129, 40, 0.89)",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "format": "percentunit",
-      "gauge": {
-        "maxValue": 1,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d44a3a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0.33
+              },
+              {
+                "color": "#299c46",
+                "value": 0.66
+              }
+            ]
+          },
+          "unit": "percentunit",
+          "unitScale": true
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -463,50 +501,32 @@
         "y": 1
       },
       "id": 23,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
+      "pluginVersion": "10.3.5",
       "targets": [
         {
-          "expr": "1 - (inspectit_self_instrumentation_queue_size{service=\"$service\"}/jvm_classes_loaded{service=\"$service\"})",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "editorMode": "code",
+          "expr": "1 - (inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}/jvm_classes_loaded{service=\"$service\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -515,18 +535,8 @@
           "resultFormat": "time_series"
         }
       ],
-      "thresholds": "0.33,0.66",
       "title": "Instrumentation Progress",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
+      "type": "gauge"
     },
     {
       "aliasColors": {
@@ -535,7 +545,17 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "LocalPrometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "links": [],
+          "unitScale": true
+        },
+        "overrides": []
+      },
       "fill": 5,
       "fillGradient": 0,
       "gridPos": {
@@ -560,19 +580,13 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "10.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "instrumented classes",
@@ -597,6 +611,10 @@
       "targets": [
         {
           "alias": "loaded classes",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
           "format": "time_series",
           "groupBy": [
@@ -644,6 +662,10 @@
         },
         {
           "alias": "instrumented classes",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "inspectit_self_instrumentation_queue_size{service=\"$service\"}",
           "format": "time_series",
           "groupBy": [
@@ -691,6 +713,10 @@
         },
         {
           "alias": "classes pending for analysis",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
           "expr": "jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
           "groupBy": [
@@ -738,9 +764,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Instrumentation State over time (Logarithmic Scale)",
       "tooltip": {
         "shared": true,
@@ -749,9 +773,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -760,44 +782,62 @@
           "format": "short",
           "label": "# Classes",
           "logBase": 10,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorPostfix": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(33, 33, 36, 1)",
-        "#967302",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 0,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "description": "Number of newly logged warnings. This metric can display too low numbers in case the agent just restarted!",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "rgba(33, 33, 36, 1)",
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(33, 33, 36, 1)",
+                "value": null
+              },
+              {
+                "color": "#967302",
+                "value": 1
+              },
+              {
+                "color": "#299c46"
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": true
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 2,
@@ -806,92 +846,82 @@
         "y": 3
       },
       "id": 107,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "$$hashKey": "object:397",
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "$$hashKey": "object:398",
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "30%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
+      "pluginVersion": "10.3.5",
       "targets": [
         {
-          "expr": "increase(inspectit_self_logs{service=~\"$service\",level=~\"WARN\"}[$__range])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "editorMode": "code",
+          "expr": "increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"WARN\"}[$__range])",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1",
       "title": "Warnings",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "$$hashKey": "object:400",
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorPostfix": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(28, 26, 25, 0)",
-        "#eab839",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 0,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "description": "Number of newly logged infos. This metric can display too low numbers in case the agent just restarted!",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": true
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 2,
@@ -900,1052 +930,65 @@
         "y": 5
       },
       "id": 143,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "$$hashKey": "object:431",
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "$$hashKey": "object:432",
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "30%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "config-server",
-          "value": "config-server"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "SUM(increase(inspectit_self_logs{service=~\"$service\",level=~\"INFO|DEBUG|TRACE\"}[$__range]))",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": "",
-      "title": "Other Logs",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "$$hashKey": "object:434",
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 7
-      },
-      "id": 144,
-      "panels": [],
-      "repeat": null,
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 2,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "title": "$service",
-      "type": "row"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 3,
-      "format": "percentunit",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 3,
-        "x": 0,
-        "y": 8
-      },
-      "id": 145,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 4,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "inspectit_self_instrumented_classes{service=\"$service\"} / jvm_classes_loaded{service=\"$service\"}",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "query": "perc = () => {\ninstrumented = from(bucket: \"telegraf\")\n|> range(start:-1h)\n|> filter(fn: (r) =>  \nr._measurement == \"inspectit_self_instrumented_classes\" AND  \nr.service == \"$service\" AND  \nr._field == \"gauge\")\n|> keep(columns: [\"_time\",\"_value\"])\n\n\nloaded = from(bucket: \"telegraf\")\n|> range(start:-1h)\n|> filter(fn: (r) =>  \nr._measurement == \"jvm_classes_loaded\" AND  \nr.service == \"$service\" AND  \nr._field == \"gauge\")\n|> keep(columns: [\"_time\",\"_value\"])\n\n\nreturn join(tables:{instrumented:instrumented, loaded:loaded},on:[\"_time\"])\n|> map(fn:(r) => ({\n_time: r._time,\n_value: (r._value_instrumented / r._value_loaded),\n_measurement: \"perc-instrumented\"    }))\n|> last()\n}\n\nperc()",
-          "refId": "A",
-          "resultFormat": "time_series"
-        }
-      ],
-      "thresholds": "10,30",
-      "title": "Instr. Scope",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "columns": [],
-      "datasource": "LocalPrometheus",
-      "fontSize": "120%",
-      "gridPos": {
-        "h": 6,
-        "w": 7,
-        "x": 3,
-        "y": 8
-      },
-      "id": 146,
-      "links": [],
-      "pageSize": null,
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 47,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 2,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "align": "auto",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "Description",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Metric",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Count",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value",
-          "thresholds": [],
-          "type": "number",
-          "unit": "none"
-        },
-        {
-          "alias": "",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "alias": "# classes loaded by JVM",
-          "expr": "jvm_classes_loaded{service=\"$service\"}",
-          "format": "time_series",
-          "groupBy": [],
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "# classes loaded by JVM",
-          "measurement": "jvm_classes_loaded",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "gauge"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "service",
-              "operator": "=~",
-              "value": "/^$service$/"
-            }
-          ]
-        },
-        {
-          "alias": "# instrumented classes",
-          "expr": "inspectit_self_instrumentation_queue_size{service=\"$service\"}",
-          "format": "time_series",
-          "groupBy": [],
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "# classes pending for analysis",
-          "measurement": "inspectit_self_instrumented_classes",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "gauge"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "service",
-              "operator": "=~",
-              "value": "/^$service$/"
-            }
-          ]
-        },
-        {
-          "alias": "# classes pending for analysis",
-          "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
-          "format": "time_series",
-          "groupBy": [],
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "# instrumented classes",
-          "measurement": "inspectit_self_instrumentation_analysis_queue_size",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "gauge"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "service",
-              "operator": "=~",
-              "value": "/^$service$/"
-            }
-          ]
-        },
-        {
-          "expr": "inspectit_self_logs{service=\"$service\",level=\"ERROR\"}",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "# errors since startup",
-          "refId": "D"
-        },
-        {
-          "expr": "inspectit_self_logs{service=\"$service\",level=\"WARN\"}",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "# warnings since startup",
-          "refId": "E"
-        }
-      ],
-      "title": "Instrumentation State",
-      "transform": "timeseries_to_rows",
-      "type": "table"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorPostfix": false,
-      "colorValue": false,
-      "colors": [
-        "rgb(33, 33, 36)",
-        "#890f02",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 0,
-      "description": "Number of newly logged errors. This metric can display too low numbers in case the agent just restarted!",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 2,
-        "x": 10,
-        "y": 8
-      },
-      "id": 147,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": " ",
-      "postfixFontSize": "30%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 76,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "host",
-      "targets": [
-        {
-          "expr": "sum(increase(inspectit_self_logs{service=~\"$service\",level=~\"FATAL|ERROR\"}[$__range]))",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": "1",
-      "title": "Errors",
-      "type": "singlestat",
-      "valueFontSize": "100%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#d44a3a",
-        "rgba(237, 129, 40, 0.89)",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "format": "percentunit",
-      "gauge": {
-        "maxValue": 1,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 3,
-        "x": 12,
-        "y": 8
-      },
-      "id": 148,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 23,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "1 - (inspectit_self_instrumentation_queue_size{service=\"$service\"}/jvm_classes_loaded{service=\"$service\"})",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "query": "perc = () => {\ninstrumented = from(bucket: \"telegraf\")\n|> range(start:-1h)\n|> filter(fn: (r) =>  \nr._measurement == \"inspectit_self_instrumentation_analysis_queue_size\" AND  \nr.service == \"$service\" AND  \nr._field == \"gauge\")\n|> keep(columns: [\"_time\",\"_value\"])\n\n\nloaded = from(bucket: \"telegraf\")\n|> range(start:-1h)\n|> filter(fn: (r) =>  \nr._measurement == \"jvm_classes_loaded\" AND  \nr.service == \"$service\" AND  \nr._field == \"gauge\")\n|> keep(columns: [\"_time\",\"_value\"])\n\n\nreturn join(tables:{instrumented:instrumented, loaded:loaded},on:[\"_time\"])\n|> map(fn:(r) => ({\n_time: r._time,\n_value: 1.0 - (r._value_instrumented / r._value_loaded),\n_measurement: \"progress\"    }))\n|> last()\n}\n\nperc()",
-          "refId": "A",
-          "resultFormat": "time_series"
-        }
-      ],
-      "thresholds": "0.33,0.66",
-      "title": "Instrumentation Progress",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "aliasColors": {
-        "classes pending for hook": "#99440a"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "LocalPrometheus",
-      "fill": 5,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 9,
-        "x": 15,
-        "y": 8
-      },
-      "hiddenSeries": false,
-      "id": 149,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
       "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 49,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "seriesOverrides": [
-        {
-          "alias": "instrumented classes",
-          "color": "#629e51",
-          "fill": 5,
-          "zindex": 3
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        {
-          "alias": "classes pending for analysis",
-          "color": "#eab839",
-          "zindex": 0
-        },
-        {
-          "alias": "loaded classes",
-          "color": "#82b5d8",
-          "zindex": -3
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
       "targets": [
         {
-          "alias": "loaded classes",
-          "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
-          "format": "time_series",
-          "groupBy": [
-            {
-              "params": [
-                "1m"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "intervalFactor": 1,
-          "legendFormat": "instrumented classes",
-          "measurement": "jvm_classes_loaded",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "gauge"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "service",
-              "operator": "=~",
-              "value": "/^$service$/"
-            }
-          ]
-        },
-        {
-          "alias": "instrumented classes",
-          "expr": "inspectit_self_instrumentation_queue_size{service=\"$service\"}",
-          "format": "time_series",
-          "groupBy": [
-            {
-              "params": [
-                "1m"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "intervalFactor": 1,
-          "legendFormat": "classes pending for analysis",
-          "measurement": "inspectit_self_instrumented_classes",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "gauge"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "service",
-              "operator": "=~",
-              "value": "/^$service$/"
-            }
-          ]
-        },
-        {
-          "alias": "classes pending for analysis",
-          "expr": "jvm_classes_loaded{service=\"$service\"}",
-          "format": "time_series",
-          "groupBy": [
-            {
-              "params": [
-                "1m"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "intervalFactor": 1,
-          "legendFormat": "loaded classes",
-          "measurement": "inspectit_self_instrumentation_analysis_queue_size",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "gauge"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "service",
-              "operator": "=~",
-              "value": "/^$service$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Instrumentation State over time (Logarithmic Scale)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "# Classes",
-          "logBase": 10,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorPostfix": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(33, 33, 36, 1)",
-        "#967302",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 0,
-      "description": "Number of newly logged warnings. This metric can display too low numbers in case the agent just restarted!",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 2,
-        "x": 10,
-        "y": 10
-      },
-      "id": 150,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "30%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 107,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "host",
-      "targets": [
-        {
-          "expr": "increase(inspectit_self_logs{service=~\"$service\",level=~\"WARN\"}[$__range])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "editorMode": "code",
+          "expr": "SUM(increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"INFO|DEBUG|TRACE\"}[$__range]))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1",
-      "title": "Warnings",
-      "type": "singlestat",
-      "valueFontSize": "100%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorPostfix": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(28, 26, 25, 0)",
-        "#eab839",
-        "#299c46"
-      ],
-      "datasource": "LocalPrometheus",
-      "decimals": 0,
-      "description": "Number of newly logged infos. This metric can display too low numbers in case the agent just restarted!",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 2,
-        "x": 10,
-        "y": 12
-      },
-      "id": 151,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "30%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "repeatIteration": 1588836480547,
-      "repeatPanelId": 143,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "service": {
-          "selected": false,
-          "text": "discovery-server",
-          "value": "discovery-server"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "SUM(increase(inspectit_self_logs{service=~\"$service\",level=~\"INFO|DEBUG|TRACE\"}[$__range]))",
-          "format": "time_series",
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": "",
       "title": "Other Logs",
-      "type": "singlestat",
-      "valueFontSize": "100%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 22,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
-        "datasource": "LocalPrometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P93B0DC4442ABD976"
+        },
         "definition": "label_values(service)",
         "hide": 0,
         "includeAll": true,
-        "index": -1,
-        "label": null,
         "multi": true,
         "name": "service",
         "options": [],
@@ -1955,7 +998,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -1966,6 +1008,7 @@
     "from": "now-30m",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {
     "refresh_intervals": [
       "5s",
@@ -1994,8 +1037,6 @@
   "timezone": "",
   "title": "inspectIT Agent Self-Monitoring",
   "uid": "oG69sg5Zk",
-  "variables": {
-    "list": []
-  },
-  "version": 1
+  "version": 2,
+  "weekStart": ""
 }
