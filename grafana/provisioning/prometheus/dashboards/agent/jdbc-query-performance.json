@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -13,15 +16,17 @@
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1627998053556,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": "LocalPrometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -31,18 +36,24 @@
       "id": 6,
       "panels": [],
       "repeat": "db_url",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "JDBC Query Performance of $db_url",
       "type": "row"
     },
     {
-      "datasource": "LocalPrometheus",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
       },
+      "description": "",
       "gridPos": {
         "h": 2,
         "w": 8,
@@ -52,23 +63,36 @@
       "id": 25,
       "maxPerRow": 4,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<h2 style=\"text-align: center\">Queries Sent by ${service}</h2>",
         "mode": "html"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "10.3.5",
       "repeat": "service",
       "repeatDirection": "h",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "LocalPrometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "percentage",
@@ -83,7 +107,8 @@
               }
             ]
           },
-          "unit": "ms"
+          "unit": "ms",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -97,6 +122,10 @@
       "maxPerRow": 4,
       "options": {
         "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -105,21 +134,27 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "10.3.5",
       "repeat": "service",
       "repeatDirection": "h",
       "targets": [
         {
-          "expr": "(sum(increase(jdbc_query_duration_sum{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "editorMode": "code",
+          "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
           "interval": "",
           "legendFormat": "{{$sql_command}}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Avg. Query Duration ($service)",
       "type": "bargauge"
     },
@@ -128,11 +163,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "LocalPrometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P93B0DC4442ABD976"
+      },
       "fieldConfig": {
         "defaults": {
-          "custom": {},
-          "unit": "ms"
+          "unit": "ms",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -163,7 +201,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "10.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -175,16 +213,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(sum(increase(jdbc_query_duration_sum{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P93B0DC4442ABD976"
+          },
+          "editorMode": "code",
+          "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
           "interval": "",
           "legendFormat": "{{sql_command}}",
+          "range": true,
           "refId": "A"
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Query Duration over Time ($service)",
       "tooltip": {
         "shared": true,
@@ -193,9 +235,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -203,40 +243,42 @@
         {
           "$$hashKey": "object:642",
           "format": "ms",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:643",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     }
   ],
   "refresh": "5m",
-  "schemaVersion": 26,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
         "allValue": ".*",
-        "current": {},
-        "datasource": "LocalPrometheus",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P93B0DC4442ABD976"
+        },
         "definition": "label_values(jdbc_url)",
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "DB",
@@ -249,17 +291,26 @@
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
         "allValue": ".*",
-        "current": {},
-        "datasource": "LocalPrometheus",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P93B0DC4442ABD976"
+        },
         "definition": "label_values(jdbc_query_duration_sum, service)",
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Calling Service",
@@ -272,17 +323,25 @@
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": "LocalPrometheus",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P93B0DC4442ABD976"
+        },
         "definition": "label_values(sql_command)",
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Command",
@@ -295,7 +354,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -306,9 +364,11 @@
     "from": "now-1h",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {},
   "timezone": "",
   "title": "JDBC Query Performance",
   "uid": "vyCYBbg7z",
-  "version": 6
+  "version": 2,
+  "weekStart": ""
 }
