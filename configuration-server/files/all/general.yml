@@ -7,3 +7,10 @@ inspectit:
     frequency: 5s
   logging:
     debug: false # set to true to see more details in the agents logs
+  tracing:
+    log-correlation:
+      trace-id-auto-injection:
+        enabled: true
+        prefix: '[TraceID: '
+        suffix: ']'
+    

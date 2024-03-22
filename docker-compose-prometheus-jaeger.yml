@@ -33,7 +33,7 @@ services:
   ## Self Monitoring
   ocelot-eum-server:
     restart: always
-    image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_VERSION}
+    image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_EUM_VERSION}
     container_name: ocelot-eum-server
     hostname: ocelot-eum-server
     environment:
@@ -227,7 +227,7 @@ services:
   ## Time Series Database & Monitoring
   prometheus:
     restart: always
-    image: prom/prometheus:v2.29.1
+    image: prom/prometheus:v2.51.0
     container_name: prometheus
     command:
       - '--storage.tsdb.retention.time=7d'
@@ -241,7 +241,7 @@ services:
   ## Collects and visualizes traces
   jaeger:
     restart: always
-    image: jaegertracing/all-in-one:1.25.0
+    image: jaegertracing/all-in-one:1.52.0
     container_name: jaeger
     ports:
       - 16686:16686
@@ -250,7 +250,7 @@ services:
   ## Dashboarding
   grafana:
     restart: always
-    image: grafana/grafana:9.0.2
+    image: grafana/grafana:10.3.5
     container_name: grafana
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=TRUE
@@ -267,13 +267,15 @@ services:
   # Grafana Loki & Promtail
   ## Make logs available in Grafana
   loki:
-    image: grafana/loki:2.5.0
+    restart: always
+    image: grafana/loki:2.9.4
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
 
   promtail:
-    image: grafana/promtail:2.5.0
+    restart: always
+    image: grafana/promtail:2.9.4
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
