@@ -10,20 +10,26 @@ datasources:
       tracesToLogs:
         datasourceUid: K1XkGKR4z
   - orgId: 1
-    version: 1
-    name: LocalPrometheus
-    type: prometheus
-    access: proxy
-    url: http://prometheus:9090
-    jsonData:
-      timeInterval: 15s
-    secureJsonData:
-      tlsCACert: $LOCALPROMETHEUS_TLSCACERT
-      tlsClientCert: $LOCALPROMETHEUS_TLSCLIENTCERT
-      tlsClientKey: $LOCALPROMETHEUS_TLSCLIENTKEY
-  - orgId: 1
     version: 3
     name: Loki
     type: loki
     access: proxy
     url: http://loki:3100
+  - orgId: 1
+    name: LocalInflux
+    type: influxdb
+    typeName: InfluxDB
+    typeLogoUrl: public/app/plugins/datasource/influxdb/img/influxdb_logo.svg
+    access: proxy
+    url: http://influxdb:8086
+    database: inspectit
+    readOnly: false
+  - orgId: 1
+    name: InfluxDB-EUM
+    type: influxdb
+    typeName: InfluxDB
+    typeLogoUrl: public/app/plugins/datasource/influxdb/img/influxdb_logo.svg
+    access: proxy
+    url: http://influxdb:8086
+    database: inspectit_eum
+    readOnly: false

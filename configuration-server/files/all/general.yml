@@ -13,4 +13,3 @@ inspectit:
         enabled: true
         prefix: '[TraceID: '
         suffix: ']'
-    
