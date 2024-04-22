@@ -31,12 +31,14 @@ services:
 
   ## Self Monitoring
   ocelot-eum-server:
-    image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_VERSION}
+    image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_EUM_VERSION}
     container_name: ocelot-eum-server
     environment:
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_DATABASE=inspectit_eum
-      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_JAEGER_GRPC=jaeger:14250
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -54,8 +56,9 @@ services:
     environment:
       - INSPECTIT_SERVICE_NAME=config-server
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -76,8 +79,9 @@ services:
     environment:
       - INSPECTIT_SERVICE_NAME=discovery-server
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -99,8 +103,9 @@ services:
     environment:
       - INSPECTIT_SERVICE_NAME=customers-service
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -123,8 +128,9 @@ services:
     environment:
       - INSPECTIT_SERVICE_NAME=visits-service
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -147,8 +153,9 @@ services:
     environment:
       - INSPECTIT_SERVICE_NAME=vets-service
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -171,8 +178,9 @@ services:
     environment:
       - INSPECTIT_SERVICE_NAME=api-gateway
       - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
     deploy:
       resources:
         limits:
@@ -218,7 +226,7 @@ services:
   #  Jaeger
   ## Collects and visualizes traces
   jaeger:
-    image: jaegertracing/all-in-one:1.25.0
+    image: jaegertracing/all-in-one:1.52.0
     container_name: jaeger
     ports:
       - 16686:16686
@@ -226,7 +234,7 @@ services:
   #  Grafana
   ## Dashboarding
   grafana:
-    image: grafana/grafana:9.0.2
+    image: grafana/grafana:10.3.5
     container_name: grafana
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=TRUE
