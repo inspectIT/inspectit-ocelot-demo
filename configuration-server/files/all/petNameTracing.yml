@@ -1,0 +1,31 @@
+# write pet name into tracing, when creating a new pet for an owner
+inspectit:
+  instrumentation:
+    scopes:
+      s_createForm:
+        type:
+          name: 'org.springframework.samples.petclinic.customers.web.PetResource'
+        methods:
+          - name: processCreationForm
+          
+    actions:
+      a_getPetName:
+        imports:
+          - "org.springframework.samples.petclinic.customers.web.PetRequest"
+        input:
+          _arg0: PetRequest
+        value-body: |
+          return _arg0.name();
+          
+    rules:
+      r_petName:
+        include:
+          r_trace_method: true
+        scopes:
+          s_createForm: true
+        entry:
+          'pet_name':
+            action: 'a_getPetName'
+        tracing:
+          attributes:
+            'petName': 'pet_name'
