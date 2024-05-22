@@ -31,17 +31,17 @@ services:
     ports:
       - 8090:8090
 
-  ## Self Monitoring
+  ## End User Monitoring
   ocelot-eum-server:
     restart: always
     image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_EUM_VERSION}
     container_name: ocelot-eum-server
     environment:
-      - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
+      - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_DATABASE=inspectit_eum
-      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_JAEGER_PROTOCOL=http/thrift
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_SERVICE_NAME=browser
     deploy:
       resources:
         limits:
@@ -67,14 +67,21 @@ services:
       resources:
         limits:
           memory: 1024M
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://config-server:8888" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     depends_on:
-      - agent
-      - ocelot-config-server
-    entrypoint: ["./dockerize", "java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+    entrypoint: ["java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.launch.JarLauncher"]
     volumes:
       - agent-vol:/agent
     ports:
-     - 8888:8888
+      - 8888:8888
 
   discovery-server:
     restart: always
@@ -91,15 +98,23 @@ services:
       resources:
         limits:
           memory: 1024M
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://discovery-server:8761" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=120s","--", "java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+    entrypoint: ["java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.launch.JarLauncher"]
     volumes:
       - agent-vol:/agent
     ports:
-     - 8761:8761
+      - 8761:8761
 
   customers-service:
     restart: always
@@ -117,11 +132,15 @@ services:
         limits:
           memory: 512M
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-      - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: ["java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.launch.JarLauncher"]
     volumes:
       - agent-vol:/agent
     ports:
@@ -143,15 +162,19 @@ services:
         limits:
           memory: 512M
     depends_on:
-     - agent
-     - ocelot-config-server
-     - config-server
-     - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: ["java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.launch.JarLauncher"]
     volumes:
       - agent-vol:/agent
     ports:
-     - 8082:8082
+      - 8082:8082
 
   vets-service:
     restart: always
@@ -169,15 +192,19 @@ services:
         limits:
           memory: 512M
     depends_on:
-     - agent
-     - ocelot-config-server
-     - config-server
-     - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: ["java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.launch.JarLauncher"]
     volumes:
       - agent-vol:/agent
     ports:
-     - 8083:8083
+      - 8083:8083
 
   api-gateway:
     restart: always
@@ -195,15 +222,19 @@ services:
         limits:
           memory: 512M
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-      - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: ["java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.launch.JarLauncher"]
     volumes:
       - agent-vol:/agent
     ports:
-     - 8080:8080
+      - 8080:8080
 
   #  Monitoring Backend
 
