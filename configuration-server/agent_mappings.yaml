@@ -1,17 +1,22 @@
 - name: "Gateway"
+  sourceBranch: "WORKSPACE"
   sources:
-  - "/gateway"
+  - "/jakarta"
   - "/all"
   attributes:
     service: "api-gateway"
 - name: "Services"
+  sourceBranch: "WORKSPACE"
   sources:
+  - "/jakarta"
   - "/services"
   - "/all"
   attributes:
     service: ".*-service"
 - name: "Default Mapping"
+  sourceBranch: "WORKSPACE"
   sources:
+  - "/jakarta"
   - "/all"
   attributes:
     service: ".*"
