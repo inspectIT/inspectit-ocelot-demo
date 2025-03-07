@@ -1,0 +1,4 @@
+inspectit:
+  agent-commands:
+    enabled: true
+    derive-from-http-config-url: true

@@ -1,0 +1,35 @@
+# Since Spring Boot 3 uses the apache client 5, we need to extend the instrumentation
+inspectit:
+  instrumentation:
+    rules:
+
+      'r_apacheclient5_detect_entry':
+        pre-entry:
+          'http_is_entry':
+            action: 'a_entrypoint_check'
+            constant-input:
+              'marker': 'http_client_entrypoint_marker'
+        
+      'r_apacheclient5_extract_details':
+        include:
+          'r_apacheclient5_detect_entry': true
+          'r_http_parametrize_path': true
+        entry:
+          'http_raw_path':
+            only-if-true: 'http_is_entry'
+            action: 'a_apacheclient5_getPath'
+          'http_method':
+            only-if-true: 'http_is_entry'
+            action: 'a_apacheclient5_getMethod'
+          'http_target_host':
+            only-if-true: 'http_is_entry'
+            action: 'a_apacheclient5_toHostString'
+        exit:
+          'http_status':
+            only-if-true: 'http_is_entry'
+            action: 'a_apacheclient5_getStatus'
+          'http_is_error':
+            only-if-true: 'http_is_entry'
+            action: 'a_http_isErrorStatus'
+            data-input:
+              'status': 'http_status'

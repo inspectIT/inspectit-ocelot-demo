@@ -1,0 +1,39 @@
+# Since Spring Boot 3 uses the apache client 5, we need to extend the instrumentation
+inspectit:
+  instrumentation:
+    rules:
+
+      'r_apacheclient5_servicegraph_propagation':
+        include:
+          'r_servicegraph_prepare_down_propagation': true
+        scopes:
+          's_apacheclient5_doExecute': true
+
+      'r_apacheclient5_servicegraph_record':
+        include:
+          'r_servicegraph_outbound_record_method': true
+          'r_apacheclient5_detect_entry': true
+          'r_apacheclient5_extract_details': true
+        scopes:
+          's_apacheclient5_doExecute': true
+        entry:
+          'servicegraph_is_entry':
+            action: 'a_entrypoint_check'
+            constant-input: 
+              'marker': 'servicegraph_outbound_marker'
+            only-if-true: 'http_is_entry'
+          'servicegraph_protocol':
+            action: 'a_assign_value'
+            constant-input: 
+              'value': 'http'
+        exit:
+          'servicegraph_target_external':
+            only-if-null: 'servicegraph_target_service'
+            action: 'a_assign_value'
+            data-input: 
+              'value': 'http_target_host'
+          'servicegraph_is_error':
+            action: 'a_assign_value'
+            data-input:
+              'value': 'http_is_error'
+      

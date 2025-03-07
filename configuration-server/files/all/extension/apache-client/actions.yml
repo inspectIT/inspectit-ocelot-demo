@@ -1,0 +1,113 @@
+# Since Spring Boot 3 uses the apache client 5, we need to extend the instrumentation
+inspectit:
+  instrumentation:
+    #-------------------------------------------------------------------------------------------------------------- 
+    # All actions are designed to be applied on CloseableHttpClient.execute(HttpHost, HttpRequest, HttpContext) 
+    # of the Apache HttpClient (https://hc.apache.org/httpcomponents-client-ga/) 
+    #-------------------------------------------------------------------------------------------------------------- 
+    actions:
+
+      'a_apacheclient5_toHostString': 
+        docs: 
+          description: "Extracts the target of the request in the form 'host:port'." 
+          return-value: "The target as a String in the form 'host:port'." 
+        imports: 
+          - 'org.apache.hc.core5.http'
+          - 'org.apache.hc.client5.http.routing'
+        input: 
+          _arg0: 'HttpHost' 
+          _arg1: 'HttpRequest'
+        value-body: |
+          if(_arg0 == null) return RoutingSupport.determineHost(_arg1);
+          return _arg0.toHostString();
+   
+      'a_apacheclient5_getPath': 
+        docs: 
+          description: 'Extracts the target HTTP path.' 
+          return-value: "The target HTTP path as a String." 
+        imports: 
+          - 'org.apache.hc.core5.http' 
+        input: 
+          _arg1: 'HttpRequest' 
+        value: '_arg1.getUri().getPath()' 
+     
+      'a_apacheclient5_getMethod': 
+        docs: 
+          description: 'Extracts the HTTP method of the request, e.g. GET or POST.' 
+          return-value: "The HTTP method as a String." 
+        imports: 
+          - 'org.apache.hc.core5.http' 
+        input: 
+          _arg1: 'HttpRequest' 
+        value: '_arg1.getMethod()' 
+     
+      'a_apacheclient5_getStatus': 
+        docs: 
+          description: |- 
+            Extracts the response status code if the request returned without an exception. 
+            Otherwise returns the name of the exception, e.g. SocketTimeoutException. 
+          return-value: "The response status code as an Integer or the name of the exception as a String." 
+        imports: 
+          - 'org.apache.hc.core5.http' 
+        input: 
+          _returnValue: 'HttpResponse' 
+          _thrown: 'Throwable' 
+        value-body: | 
+          if (_thrown != null) { 
+            return _thrown.getClass().getSimpleName(); 
+          } else { 
+            return Integer.valueOf(_returnValue.getCode()); 
+          } 
+     
+      'a_apacheclient5_downPropagation': 
+        docs: 
+          description: 'Writes down-propagated context data to the HTTP headers.' 
+        is-void: true 
+        imports: 
+          - 'java.util' 
+          - 'org.apache.hc.core5.http' 
+        input: 
+          _arg1: 'HttpMessage' 
+          _context: 'InspectitContext' 
+        value-body: | 
+          Map headers = _context.getDownPropagationHeaders(); 
+          Iterator it = headers.entrySet().iterator(); 
+          while (it.hasNext()) { 
+            Map$Entry e = (Map$Entry) it.next(); 
+            _arg1.setHeader((String) e.getKey(), (String) e.getValue()); 
+          } 
+     
+      'a_apacheclient5_upPropagation': 
+        docs: 
+          description: 'Reads up-propagated context data from the HTTP headers.' 
+        is-void: true 
+        imports: 
+          - 'java.util' 
+          - 'org.apache.hc.core5.http' 
+        input: 
+          _returnValue: 'HttpMessage' 
+          _context: 'InspectitContext' 
+        value-body: | 
+          if (_returnValue != null) { 
+            Collection headerKeys = _context.getPropagationHeaderNames(); 
+            Map presentHeaders = new HashMap(); 
+            Iterator it = headerKeys.iterator(); 
+            while (it.hasNext()) { 
+              String name = (String) it.next(); 
+              Header[] headers = _returnValue.getHeaders(name); 
+              if (headers != null && headers.length > 0) { 
+                StringBuilder sb = new StringBuilder(); 
+                for (int i = 0; i < headers.length; i++) { 
+                  String value = headers[i].getValue(); 
+                  if (value != null) { 
+                    if (sb.length() > 0) { 
+                      sb.append(','); 
+                    } 
+                    sb.append(value); 
+                  } 
+                } 
+                presentHeaders.put(name, sb.toString()); 
+              } 
+            } 
+            _context.readUpPropagationHeaders(presentHeaders); 
+          }

@@ -1,0 +1,14 @@
+# Since Spring Boot 3 uses the apache client 5, we need to extend the instrumentation
+inspectit:
+  instrumentation:
+    scopes:
+  
+      's_apacheclient5_doExecute':
+        docs:
+          description: "Targets the 'doExecute' method for any class inheriting from org.apache.hc.client5.http.impl.claccis.CloseableHttpClient."
+        superclass:
+          name: 'org.apache.hc.client5.http.impl.classic.CloseableHttpClient'
+        methods:
+          - name: 'doExecute'
+        advanced:
+          instrument-only-inherited-methods: true

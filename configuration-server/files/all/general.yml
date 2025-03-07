@@ -13,3 +13,6 @@ inspectit:
         enabled: true
         prefix: '[TraceID: '
         suffix: ']'
+  self-monitoring:
+    agent-health:
+      validity-period: 10m

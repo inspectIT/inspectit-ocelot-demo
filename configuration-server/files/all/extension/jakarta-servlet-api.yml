@@ -1,0 +1,167 @@
+# Since Java 17 uses the jakarta servlet instead of the javax servlet,
+# we need to extend the instrumentation
+inspectit:
+  instrumentation:
+    actions:
+
+      'a_servletrequest_isHttp':
+        docs:
+          since: '1.2.1'
+          description: 'Checks if a given ServletRequest is an instance of HttpServletRequest.'
+          inputs:
+            'request': 'The given ServletRequest'
+          return-value: "true, if it is an instance of HttpServletRequest, otherwise false."
+        imports:
+          - 'jakarta.servlet'
+          - 'jakarta.servlet.http'
+        input:
+          'request': 'ServletRequest'
+        value: 'Boolean.valueOf(request instanceof HttpServletRequest)'
+
+      'a_httpservletrequest_getPath':
+        docs:
+          since: '1.2.1'
+          description: 'Extracts the request path of a given HttpServletRequest.'
+          inputs:
+            'request': 'The given HttpServletRequest'
+          return-value: "The request path as a String."
+        imports:
+          - 'jakarta.servlet.http'
+        input:
+          'request': 'HttpServletRequest'
+        value: 'java.net.URI.create(request.getRequestURI()).getPath()'
+
+      'a_httpservletrequest_getMethod':
+        docs:
+          since: '1.2.1'
+          description: 'Extracts the HTTP method of a given HttpServletRequest, e.g. GET or POST.'
+          inputs:
+            'request': 'The given HttpServletRequest'
+          return-value: "The HTTP method as a String."
+        imports:
+          - 'jakarta.servlet.http'
+        input:
+          'request': 'HttpServletRequest'
+        value: 'request.getMethod()'
+
+      'a_httpservletresponse_getStatus':
+        docs:
+          since: '1.2.1'
+          description: 'Extracts the response status code of a given HttpServletResponse.'
+          inputs:
+            'response': 'The given HttpServletResponse'
+          return-value: "The response status code as an Integer."
+        imports:
+          - 'jakarta.servlet.http'
+        input:
+          'response': 'HttpServletResponse'
+        value: 'Integer.valueOf(response.getStatus())'
+
+      'a_servletapi_downPropagation':
+        docs:
+          since: '1.2.1'
+          description: 'Reads down-propagated data from the request HTTP headers.'
+        is-void: true
+        imports:
+          - 'java.util'
+          - 'jakarta.servlet'
+          - 'jakarta.servlet.http'
+        input:
+          _arg0: 'ServletRequest'
+          _context: 'InspectitContext'
+        value-body: |
+          if (_arg0 instanceof HttpServletRequest) {
+            HttpServletRequest req = (HttpServletRequest) _arg0;
+            Collection headerKeys = _context.getPropagationHeaderNames();
+            Map presentHeaders = new HashMap();
+            Iterator it = headerKeys.iterator();
+            while (it.hasNext()) {
+              String name = (String) it.next();
+              java.util.Enumeration values = req.getHeaders(name);
+              if (values != null && values.hasMoreElements()) {
+                presentHeaders.put(name, String.join(",", Collections.list(values)));
+              }
+            }
+            _context.readDownPropagationHeaders(presentHeaders);
+          }
+
+      'a_servletapi_upPropagation':
+        docs:
+          since: '1.2.1'
+          description: "Writes up-propagated data to the given HttpServletResponse's HTTP headers."
+          inputs:
+            'response': 'The HttpServletResponse to write to.'
+        is-void: true
+        imports:
+          - 'java.util'
+          - 'jakarta.servlet'
+          - 'jakarta.servlet.http'
+        input:
+          'response': 'ServletResponse'
+          _context: 'InspectitContext'
+        value-body: |
+          if (response instanceof HttpServletResponse) {
+            HttpServletResponse res = (HttpServletResponse) response;
+            if (!res.isCommitted()) {
+              Map headers = _context.getUpPropagationHeaders();
+              Iterator it = headers.entrySet().iterator();
+              while (it.hasNext()) {
+                Map$Entry e = (Map$Entry) it.next();
+                res.setHeader((String) e.getKey(), (String) e.getValue());
+              }
+            }
+          }
+
+
+    scopes:
+
+      's_servletapi_servlet_service':
+        docs:
+          since: '1.2.1'
+          description: "Targets the 'service' method for any class implementing javax.servlet.Servlet."
+        interfaces:
+          - name: 'jakarta.servlet.Servlet'
+        methods:
+          - name: 'service'
+        advanced:
+          instrument-only-inherited-methods: true
+
+      's_servletapi_filter_doFilter':
+        docs:
+          since: '1.2.1'
+          description: "Targets the 'doFilter' method for any class implementing javax.servlet.Filter"
+        interfaces:
+          - name: 'jakarta.servlet.Filter'
+        methods:
+          - name: 'doFilter'
+        advanced:
+          instrument-only-inherited-methods: true
+
+      's_myScope':
+        type:
+          name: 'com.example.demo.GreetingController'
+          matcher-mode: STARTS_WITH
+        methods:
+          - visibility: PUBLIC
+
+      's_servletapi_servletresponse_getOutputStream':
+        docs:
+          since: '1.2.1'
+          description: "Targets the 'getOutputStream' method for any class implementing javax.servlet.ServletResponse."
+        interfaces:
+          - name: 'jakarta.servlet.ServletResponse'
+        methods:
+          - name: 'getOutputStream'
+        advanced:
+          instrument-only-inherited-methods: true
+
+      's_servletapi_servletresponse_getWriter':
+        docs:
+          since: '1.2.1'
+          description: "Targets the 'getWriter' method for any class implementing javax.servlet.ServletResponse."
+        interfaces:
+          - name: 'jakarta.servlet.ServletResponse'
+        methods:
+          - name: 'getWriter'
+        advanced:
+          instrument-only-inherited-methods: true
