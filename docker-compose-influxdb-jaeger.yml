@@ -257,6 +257,35 @@ services:
     ports:
      - "8080:8080"
 
+  genai-service:
+    image: inspectit/spring-petclinic-genai-service:${INSPECTIT_PETCLINIC_VERSION}
+    container_name: genai-service
+    restart: always
+    environment:
+      - INSPECTIT_SERVICE_NAME=genai-service
+      - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    depends_on:
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
+    volumes:
+      - agent-vol:/agent
+    ports:
+      - "8084:8084"
+
   ###########################
   ###  MONITORING BACKEND ###
   ###########################
