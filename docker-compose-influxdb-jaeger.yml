@@ -21,7 +21,8 @@ services:
         limits:
           memory: 128M
     depends_on:
-      - influxdb
+      influxdb:
+        condition: service_healthy
     volumes:
       - agent-vol:/agent
 
@@ -320,8 +321,6 @@ services:
 
   #  InfluxDB
   ## Time Series Database
-  # TODO update to version 2
-  # TODO add health check
   influxdb:
     image: influxdb:1.8
     container_name: influxdb
@@ -334,6 +333,11 @@ services:
       resources:
         limits:
           memory: 512M
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8086/ping" ]
+      interval: 20s
+      timeout: 3s
+      retries: 10
     volumes:
       - ./influx:/docker-entrypoint-initdb.d
     ports:
