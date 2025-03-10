@@ -5,8 +5,13 @@ x-java-entrypoint: &java_entrypoint
   - "org.springframework.boot.loader.launch.JarLauncher"
 
 services:
-  #  Ocelot
-  ## Serves as a collector for traces
+
+  #################
+  ### inspectIT ###
+  #################
+
+  #  Ocelot agent
+  ## Serves as a collector for traces and metrics
   agent:
     image: inspectit/inspectit-ocelot-agent:${INSPECTIT_OCELOT_VERSION}
     container_name: agent
@@ -20,7 +25,7 @@ services:
     volumes:
       - agent-vol:/agent
 
-  ## Fetches the configuration
+  ## Provides the configuration
   ocelot-config-server:
     image: inspectit/inspectit-ocelot-configurationserver:${INSPECTIT_OCELOT_VERSION}
     container_name: ocelot-config-server
@@ -37,7 +42,7 @@ services:
     ports:
       - "8090:8090"
 
-  ## Self Monitoring
+  ## End user monitoring
   ocelot-eum-server:
     image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_EUM_VERSION}
     container_name: ocelot-eum-server
@@ -72,7 +77,10 @@ services:
     ports:
       - "8085:8085"
 
-  #  Petclinic
+  #########################
+  #### DEMO APPLICATION ###
+  #########################
+
   config-server:
     image: inspectit/spring-petclinic-config-server:${INSPECTIT_PETCLINIC_VERSION}
     container_name: config-server
@@ -142,6 +150,7 @@ services:
       - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
       - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
@@ -170,6 +179,7 @@ services:
       - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
       - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
@@ -199,6 +209,7 @@ services:
       - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
       - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
@@ -246,14 +257,25 @@ services:
     ports:
      - "8080:8080"
 
-  #  Monitoring Backend
+  ###########################
+  ###  MONITORING BACKEND ###
+  ###########################
 
   #  Load Generator
-  ## Artificial load on Demo
+  ## Artificial load on demo
   load:
-    image: inspectit/spring-petclinic-load:1.0
+    build:
+      context: load
     container_name: load-generator
     restart: always
+    environment:
+      - LOCUST_WEB_PORT
+      - LOCUST_USERS
+      - LOCUST_HOST
+      - LOCUST_HEADLESS
+      - LOCUST_AUTOSTART
+    ports:
+      - "8089:8089"
 
   # OpenTelemetry collector
   ## Collects traces
@@ -269,6 +291,8 @@ services:
 
   #  InfluxDB
   ## Time Series Database
+  # TODO update to version 2
+  # TODO add health check
   influxdb:
     image: influxdb:1.8
     container_name: influxdb
