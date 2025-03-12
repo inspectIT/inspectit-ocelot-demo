@@ -206,7 +206,6 @@ services:
     restart: always
     environment:
       - INSPECTIT_SERVICE_NAME=vets-service
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
       - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
