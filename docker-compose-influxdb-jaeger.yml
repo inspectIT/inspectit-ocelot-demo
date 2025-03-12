@@ -311,6 +311,7 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.120.0
     container_name: otel-collector
+    restart: always
     command: [ "--config=/etc/otelcol-config.yml" ]
     volumes:
       - ./otel/otelcol-config.yml:/etc/otelcol-config.yml
