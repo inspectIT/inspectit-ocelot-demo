@@ -51,7 +51,8 @@ services:
     environment:
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_DATABASE=inspectit_eum
-      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_OTLP_ENABLED=DISABLED
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
       - INSPECTIT_SERVICE_NAME=eum-server
       - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EXPORTERS_TRACING_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
@@ -320,6 +321,20 @@ services:
       - ./influx:/docker-entrypoint-initdb.d
     ports:
       - "8086:8086"
+
+  # OpenTelemetry collector
+  ## Collects traces
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.120.0
+    container_name: otel-collector
+    restart: always
+    command: [ "--config=/etc/otelcol-config.yml" ]
+    volumes:
+      - ./otel/otelcol-zipkin-config.yml:/etc/otelcol-config.yml
+    ports:
+      - "4317:4317"   # OTLP GRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+
 
   #  Zipkin
   ## Collects and visualizes traces
