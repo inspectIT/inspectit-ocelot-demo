@@ -1,3 +1,10 @@
+- name: "Gateway"
+  sourceBranch: "WORKSPACE"
+  sources:
+  - "/gateway"
+  - "/all"
+  attributes:
+    service: "api-gateway"
 - name: "Customers"
   sourceBranch: "WORKSPACE"
   sources:

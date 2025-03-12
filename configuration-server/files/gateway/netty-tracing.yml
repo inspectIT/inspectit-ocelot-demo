@@ -1,0 +1,41 @@
+# Instrumentation for the reactor netty client
+inspectit:
+  instrumentation:
+    
+    scopes:
+      s_reactor_netty_connector:
+        type:
+          name: "org.springframework.http.client.reactive.ReactorClientHttpConnector"
+        methods:
+          - name: "adaptRequest"
+
+    actions:
+      a_netty_downPropagation:
+        is-void: true
+        imports:
+          - "reactor.netty.http.client"
+          - "java.util"
+        input:
+          _arg2: HttpClientRequest
+          _context: InspectitContext
+        value-body: |
+          if(_arg2 != null) {
+            Map headers = _context.getDownPropagationHeaders();
+            Iterator it = headers.entrySet().iterator();
+            while (it.hasNext()) {
+              Map$Entry e = (Map$Entry) it.next();
+              _arg2.addHeader((String) e.getKey(), (String) e.getValue());
+            }
+          }
+        
+    rules:
+      r_netty_tracing:
+        scopes:
+          s_reactor_netty_connector: true
+        post-entry:
+          unused-key:
+            action: a_netty_downPropagation
+        tracing:
+          start-span: true
+          kind: CLIENT
+          

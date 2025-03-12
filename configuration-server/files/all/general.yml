@@ -8,6 +8,7 @@ inspectit:
   logging:
     debug: false # set to true to see more details in the agents logs
   tracing:
+    propagation-format: TRACE_CONTEXT
     log-correlation:
       trace-id-auto-injection:
         enabled: true

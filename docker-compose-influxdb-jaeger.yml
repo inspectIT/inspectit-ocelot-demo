@@ -238,6 +238,7 @@ services:
       - INSPECTIT_EXPORTERS_METRICS_INFLUX_ENDPOINT=http://influxdb:8086
       - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
       - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
