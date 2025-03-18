@@ -1,0 +1,157 @@
+inspectit:
+  instrumentation:
+    actions:
+    
+      a_netty_isRequest:
+        imports:
+          - "io.netty.handler.codec.http"
+        input:
+          _arg1: Object
+        value: Boolean.valueOf(_arg1 instanceof HttpRequest)
+    
+      a_netty_channel_getPath:
+        imports:
+          - "io.netty.handler.codec.http"
+        input:
+          _arg1: Object
+        value-body: |
+          if(_arg1 instanceof HttpRequest) {
+            HttpRequest req = (HttpRequest) _arg1;
+            return req.uri();
+          }
+          return null;
+          
+      a_netty_channel_getMethod:
+        imports:
+          - "io.netty.handler.codec.http"
+        input:
+          _arg1: Object
+        value-body: |
+          if(_arg1 instanceof HttpRequest) {
+            HttpRequest req = (HttpRequest) _arg1;
+            return req.method().name();
+          }
+          return null;
+      
+      a_netty_channel_getSpanName:
+        imports:
+          - "io.netty.handler.codec.http"
+        input: 
+          _arg1: Object
+        value-body: |
+          if(_arg1 instanceof HttpRequest) {
+              HttpRequest req = (HttpRequest) _arg1;
+              return req.method() + " " + new QueryStringDecoder(req.uri()).path();
+          }
+          return null;
+       
+      a_netty_channel_getHost:
+        imports:
+          - "io.netty.handler.codec.http"
+        input: 
+          _arg1: Object
+        value-body: |
+          if(_arg1 instanceof HttpRequest) {
+            HttpRequest req = (HttpRequest) _arg1;
+            return req.headers().get(HttpHeaderNames.HOST);
+          }
+          return null;
+
+      a_netty_channel_getStatus:
+        imports:
+          - "io.netty.handler.codec.http"
+        input:
+          _arg0: Object
+        value-body: |
+          if(_arg0 instanceof HttpResponse) {
+            HttpResponse resp = (HttpResponse) _arg0;
+            return new Integer(resp.status().code());
+          }
+          return null;
+      
+      a_netty_get_http_span_of_channel:
+        imports:
+          - "io.netty.channel"
+          - "io.netty.util"
+        input: 
+          _arg0: ChannelHandlerContext
+        value: _arg0.channel().attr(AttributeKey.valueOf("inspectit_netty_http_span")).get()
+        
+      a_netty_set_http_span_of_channel:
+        is-void: true
+        imports:
+          - "io.netty.channel"
+          - "io.netty.util"
+        input: 
+          _arg0: ChannelHandlerContext
+          span: Object
+        value: _arg0.channel().attr(AttributeKey.valueOf("inspectit_netty_http_span")).set(span)
+        
+      a_netty_remove_http_span_of_channel:
+        imports:
+          - "io.netty.channel"
+          - "io.netty.util"
+        input: 
+          _this: ChannelHandlerContext
+        value: _this.channel().attr(AttributeKey.valueOf("inspectit_netty_http_span")).getAndSet(null)
+          
+      a_netty_channel_downPropagation:
+        is-void: true
+        imports:
+          - "io.netty.handler.codec.http"
+          - "java.util"
+        input:
+          _arg1: Object
+          _context: InspectitContext
+        value-body: |
+          if(_arg1 instanceof HttpRequest) {
+             if(_context.getData("netty_down_prop_performed_marker") == null) {
+              _context.setData("netty_down_prop_performed_marker", Boolean.TRUE);
+              HttpRequest req = (HttpRequest) _arg1;
+              HttpHeaders requestHeaders = req.headers();
+              
+              Map propagationHeaders = _context.getDownPropagationHeaders();
+              Iterator it = propagationHeaders.entrySet().iterator();
+              while (it.hasNext()) {
+                Map$Entry e = (Map$Entry) it.next();
+                requestHeaders.add((String) e.getKey(), e.getValue());
+              }
+            }
+          }
+        
+      a_netty_channel_upPropagation:
+        is-void: true
+        imports:
+          - "io.netty.handler.codec.http"
+          - "java.util"
+        input:
+          _arg0: Object
+          _context: InspectitContext
+        value-body: |
+          if(_arg0 instanceof HttpResponse) {
+            if(_context.getData("netty_up_prop_performed_marker") == null) {
+              _context.setData("netty_up_prop_performed_marker", Boolean.TRUE);
+              HttpResponse resp = (HttpResponse) _arg0;
+              HttpHeaders responseHeaders = resp.headers();
+              
+              Collection headerKeys = _context.getPropagationHeaderNames();
+              Map presentHeaders = new HashMap();
+              Iterator it = headerKeys.iterator();
+              while (it.hasNext()) {
+                 String name = (String) it.next();
+                 StringBuilder sb = new StringBuilder();
+                 Collection headers = responseHeaders.getAll(name);
+                 Iterator headerIterator = headers.iterator();
+                 while (headerIterator.hasNext()) {
+                    String value = (String) headerIterator.next();
+                    if (value != null) {
+                      if (sb.length() > 0) sb.append(',');
+                      sb.append(value);
+                    }
+                 }
+                 presentHeaders.put(name, sb.toString());
+              }
+              _context.readUpPropagationHeaders(presentHeaders);
+            }
+          }
+    
