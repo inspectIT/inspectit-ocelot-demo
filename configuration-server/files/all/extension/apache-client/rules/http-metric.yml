@@ -1,0 +1,11 @@
+# Since Spring Boot 3 uses the apache client 5, we need to extend the instrumentation
+inspectit:
+  instrumentation:
+    rules:
+
+      'r_apacheclient5_http_metric':
+        include:
+          'r_apacheclient5_extract_details': true
+          'r_http_client_record_metric_on_method': true
+        scopes:
+          's_apacheclient5_doExecute': true

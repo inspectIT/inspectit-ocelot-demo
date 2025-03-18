@@ -1,0 +1,138 @@
+inspectit:
+  instrumentation:
+    
+    rules:
+      
+      # TRACING #
+      r_netty_tracing_start:
+        include:
+          r_netty_detect_entry: true
+          r_netty_extract_request_details: true
+          r_http_client_tracing_default_attributes: true
+        scopes:
+          s_netty_channel_write: true
+        pre-entry:
+          request_span_name:
+            action: a_netty_channel_getSpanName
+        post-entry: # after tracing
+          write_netty_http_span:
+            action: a_netty_set_http_span_of_channel
+            data-input:
+              span: netty_http_span
+        tracing:
+          start-span: true
+          end-span: false
+          kind: CLIENT
+          start-span-conditions:
+            only-if-true: http_is_entry
+          store-span: netty_http_span
+          name: request_span_name
+          
+      r_netty_tracing_end:
+        include:
+          r_netty_extract_response_details: true
+          r_http_tracing_default_attributes: true
+        scopes:
+          s_netty_channel_read: true
+        entry: # before tracing
+          netty_http_span: 
+            action: a_netty_remove_http_span_of_channel
+        tracing:
+          continue-span: netty_http_span
+          end-span: true
+          
+      # PROPAGATION #
+      r_netty_downPropagation:
+        scopes:
+          s_netty_channel_write: true
+        post-entry:
+          do_down_propagation:
+            action: a_netty_channel_downPropagation 
+            
+      r_netty_upPropagation:
+        scopes:
+          s_netty_channel_read: true
+        pre-exit:
+          do_up_propagation:
+            action: a_netty_channel_upPropagation
+
+      # SERVICE GRAPH #
+      r_netty_servicegraph_propagation:
+        include:
+          r_servicegraph_prepare_down_propagation: true
+        scopes:
+          s_netty_channel_write: true
+          
+      r_netty_servicegraph_record:
+        include:
+          r_servicegraph_outbound_record_method: true
+          r_netty_detect_entry: true
+          r_netty_extract_request_details: true
+        entry:
+          servicegraph_is_entry:
+            action: a_entrypoint_check
+            constant-input: 
+              'marker': 'servicegraph_outbound_marker'
+            only-if-true: 'http_is_entry'
+          servicegraph_protocol:
+            action: a_assign_value
+            constant-input: 
+              'value': 'http'
+        exit:
+          servicegraph_target_external:
+            only-if-null: 'servicegraph_target_service'
+            action: a_assign_value
+            data-input: 
+              'value': http_target_host
+          servicegraph_is_error:
+            action: a_assign_value
+            data-input:
+              'value': 'http_is_error'
+         
+      # SHARED #
+      r_netty_detect_entry:
+        pre-entry:
+          is_request:
+            action: a_netty_isRequest
+          is_entry:
+            action: a_entrypoint_check
+            constant-input: 
+              marker: 'http_client_entrypoint_marker' # propagation is defined in the shared http settings
+          http_is_entry:
+            action: a_logic_and
+            data-input:
+              a: is_entry
+              b: is_request
+              
+      r_netty_extract_details:
+        include:
+          r_netty_extract_request_details: true
+          r_netty_extract_response_details: true
+      
+      r_netty_extract_request_details:
+        include:
+          r_netty_detect_entry: true
+          r_http_parametrize_path: true # derives http_path form http_raw_path
+        scopes:
+          s_netty_channel_write: true
+        entry:
+          http_raw_path:
+            only-if-true: 'http_is_entry'
+            action: a_netty_channel_getPath
+          http_method:
+            only-if-true: 'http_is_entry'
+            action: a_netty_channel_getMethod
+          http_target_host:
+            only-if-true: 'http_is_entry'
+            action: a_netty_channel_getHost
+              
+      r_netty_extract_response_details:
+        scopes:
+          s_netty_channel_read: true
+        entry:
+          http_status:
+            action: a_netty_channel_getStatus
+          http_is_error:
+            action: a_http_isErrorStatus
+            data-input:
+              'status': http_status

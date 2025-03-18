@@ -5,7 +5,8 @@ providers:
   orgId: 1
   folder: ''
   type: file
-  disableDeletion: false
+  disableDeletion: true
+  allowUiUpdates: true
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
     path: /usr/share/grafana/custom/dashboards
@@ -13,7 +14,17 @@ providers:
   orgId: 1
   folder: 'agent'
   type: file
-  disableDeletion: false
+  disableDeletion: true
+  allowUiUpdates: true
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
     path: /usr/share/grafana/custom/dashboards/agent
+- name: 'eum-server'
+  orgId: 1
+  folder: 'eum-server'
+  type: file
+  disableDeletion: true
+  allowUiUpdates: true
+  updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
+  options:
+    path: /usr/share/grafana/custom/dashboards/eum-server

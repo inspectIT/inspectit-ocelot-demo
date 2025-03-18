@@ -1,0 +1,28 @@
+inspectit:
+  instrumentation:
+    scopes:
+
+      s_netty_channel_connect:
+        superclass:
+          name: "io.netty.channel.ChannelOutboundHandlerAdapter"
+        methods:
+          - name: "connect"
+        advanced:
+          instrument-only-inherited-methods: true
+       
+      s_netty_channel_write:
+        superclass:
+          name: "io.netty.channel.ChannelOutboundHandlerAdapter"
+        methods:
+          - name: "write"
+        advanced:
+          instrument-only-inherited-methods: true
+          
+      s_netty_channel_read:
+        interfaces:
+          - name: "io.netty.channel.ChannelHandlerContext"
+        methods:
+          - name: "fireChannelRead"
+        advanced:
+          instrument-only-inherited-methods: true
+    

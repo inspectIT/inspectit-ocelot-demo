@@ -14,18 +14,20 @@ inspectit:
           r_trace_method: true
         scopes:
           s_gen_scope_2531106c_77b9_4c1f_bb2a_551e1511aaaa: true
+          
       r_method_configuration_duration:
         include:
           r_method_metric: true
         scopes:
           s_gen_scope_2531106c_77b9_4c1f_bb2a_551e1511aaaa: true
+          
     scopes:
       s_gen_scope_2531106c_77b9_4c1f_bb2a_551e1511aaaa:
         type:
           name: 'org.springframework.samples.petclinic.customers.web.PetResource'
-          matcher-mode: 'STARTS_WITH'
+          matcher-mode: STARTS_WITH
         methods:
           - name: validatePetType
-            matcher-mode: 'STARTS_WITH'
+            matcher-mode: STARTS_WITH
             visibility:
               - PRIVATE

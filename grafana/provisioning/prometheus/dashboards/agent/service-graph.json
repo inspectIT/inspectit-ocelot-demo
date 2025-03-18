@@ -25,12 +25,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1657718161879,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
+        "default": false,
         "type": "prometheus",
         "uid": "P93B0DC4442ABD976"
       },
@@ -41,7 +42,6 @@
         "y": 0
       },
       "id": 2,
-      "links": [],
       "options": {
         "aggregationType": "service",
         "baselineRtUpper": "threshold",
@@ -190,7 +190,8 @@
             "type": "prometheus",
             "uid": "P93B0DC4442ABD976"
           },
-          "expr": "sum(increase(service_in_responsetime_sum_total{service=~\"$service\"}[$__range]) or increase(service_in_responsetime_sum_total{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
+          "editorMode": "code",
+          "expr": "sum(increase(service_in_responsetime_sum_milliseconds_total{service=~\"$service\"}[$__range]) or increase(service_in_responsetime_sum_milliseconds_total{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -203,7 +204,8 @@
             "type": "prometheus",
             "uid": "P93B0DC4442ABD976"
           },
-          "expr": "sum(increase(service_out_responsetime_sum_total{service=~\"$service\"}[$__range]) or increase(service_out_responsetime_sum_total{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
+          "editorMode": "code",
+          "expr": "sum(increase(service_out_responsetime_sum_milliseconds_total{service=~\"$service\"}[$__range]) or increase(service_out_responsetime_sum_milliseconds_total{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -241,13 +243,13 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 36,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
+          "selected": false,
           "text": "service",
           "value": "service"
         },
@@ -304,7 +306,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {

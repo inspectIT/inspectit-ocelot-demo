@@ -1,23 +1,35 @@
-version: '3'
+x-java-entrypoint: &java_entrypoint
+  - "java"
+  - "-javaagent:/agent/inspectit-ocelot-agent.jar"
+  - "-Dinspectit.config.http.url=http://ocelot-config-server:8090/api/v1/agent/configuration"
+  - "org.springframework.boot.loader.launch.JarLauncher"
 
 services:
-  #  Ocelot
-  ## Serves as a collector for traces
+
+  #################
+  ### inspectIT ###
+  #################
+
+  #  Ocelot agent
+  ## Serves as a collector for traces and metrics
   agent:
     image: inspectit/inspectit-ocelot-agent:${INSPECTIT_OCELOT_VERSION}
     container_name: agent
+    restart: always
     deploy:
       resources:
         limits:
           memory: 128M
+    depends_on:
+      - prometheus
     volumes:
       - agent-vol:/agent
 
-  ##  Fetches the configuration
+  ## Provides the configuration
   ocelot-config-server:
-    restart: always
     image: inspectit/inspectit-ocelot-configurationserver:${INSPECTIT_OCELOT_VERSION}
     container_name: ocelot-config-server
+    restart: always
     deploy:
       resources:
         limits:
@@ -28,230 +40,323 @@ services:
     volumes:
       - ./configuration-server:/configuration-server
     ports:
-      - 8090:8090
+      - "8090:8090"
 
-  ## Self Monitoring
+  ## End user monitoring
   ocelot-eum-server:
-    restart: always
-    image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_VERSION}
+    image: inspectit/inspectit-ocelot-eum-server:${INSPECTIT_OCELOT_EUM_VERSION}
     container_name: ocelot-eum-server
-    hostname: ocelot-eum-server
+    restart: always
     environment:
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
-      - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_PROMETHEUS_PORT=9097
+      - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_PROMETHEUS_HOST=0.0.0.0
-      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_JAEGER_GRPC=jaeger:14250
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - INSPECTIT_EUM_SERVER_EXPORTERS_TRACING_SERVICE_NAME=frontend
+      - INSPECTIT_SERVICE_NAME=eum-server
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9092
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+    depends_on:
+      - agent
+      - config-server
+    entrypoint: [
+      "java",
+      "-Dserver.port=8085",
+      "-Dinspectit.config.http.url=http://ocelot-config-server:8090/api/v1/agent/configuration",
+      "-javaagent:/agent/inspectit-ocelot-agent.jar",
+      "-jar",
+      "/inspectit-ocelot-eum-server.jar"
+    ]
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    volumes:
+      - agent-vol:/agent
+    ports:
+      - "8085:8085"
 
+  #########################
+  #### DEMO APPLICATION ###
+  #########################
+
+  config-server:
+    image: inspectit/spring-petclinic-config-server:${INSPECTIT_PETCLINIC_VERSION}
+    container_name: config-server
+    restart: always
+    environment:
+      - INSPECTIT_SERVICE_NAME=config-server
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
     deploy:
       resources:
         limits:
           memory: 512M
-    volumes:
-      - ./eum-server:/eum-server
-    ports:
-      - 8085:8085
-      - 9097:9097
-
-  #  Petclinic
-  config-server:
-    restart: always
-    image: inspectit/spring-petclinic-config-server:${INSPECTIT_PETCLINIC_VERSION}
-    container_name: config-server
-    hostname: config-server
-    environment:
-      - INSPECTIT_SERVICE_NAME=config-server
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9096
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
-    deploy:
-      resources:
-        limits:
-          memory: 1024M
     depends_on:
-      - agent
-      - ocelot-config-server
-    entrypoint: ["./dockerize", "java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+    entrypoint: *java_entrypoint
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://config-server:8888"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
     volumes:
       - agent-vol:/agent
     ports:
-      - 8888:8888
-      - 9096:9096
+      - "8888:8888"
 
   discovery-server:
-    restart: always
     image: inspectit/spring-petclinic-discovery-server:${INSPECTIT_PETCLINIC_VERSION}
     container_name: discovery-server
-    hostname: discovery-server
+    restart: always
     environment:
       - INSPECTIT_SERVICE_NAME=discovery-server
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9095
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
-    deploy:
-      resources:
-        limits:
-          memory: 1024M
-    depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
-    volumes:
-      - agent-vol:/agent
-    ports:
-      - 8761:8761
-      - 9095:9095
-
-  customers-service:
-    restart: always
-    image: inspectit/spring-petclinic-customers-service:${INSPECTIT_PETCLINIC_VERSION}
-    container_name: customers-service
-    hostname: customers-service
-    environment:
-      - INSPECTIT_SERVICE_NAME=customers-service
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 512M
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-      - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://discovery-server:8761"]
+      interval: 20s
+      timeout: 3s
+      retries: 10
     volumes:
       - agent-vol:/agent
     ports:
-      - 8081:8081
-      - 9091:9091
+      - "8761:8761"
+
+  customers-service:
+    image: inspectit/spring-petclinic-customers-service:${INSPECTIT_PETCLINIC_VERSION}
+    container_name: customers-service
+    restart: always
+    environment:
+      - INSPECTIT_SERVICE_NAME=customers-service
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    depends_on:
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
+    volumes:
+      - agent-vol:/agent
+    ports:
+      - "8081:8081"
 
   visits-service:
-    restart: always
     image: inspectit/spring-petclinic-visits-service:${INSPECTIT_PETCLINIC_VERSION}
     container_name: visits-service
-    hostname: visits-service
+    restart: always
     environment:
       - INSPECTIT_SERVICE_NAME=visits-service
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9092
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 512M
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-      - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
     volumes:
       - agent-vol:/agent
     ports:
-      - 8082:8082
-      - 9092:9092
+      - "8082:8082"
 
   vets-service:
-    restart: always
     image: inspectit/spring-petclinic-vets-service:${INSPECTIT_PETCLINIC_VERSION}
     container_name: vets-service
-    hostname: vets-service
+    restart: always
     environment:
       - INSPECTIT_SERVICE_NAME=vets-service
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9093
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 512M
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-      - discovery-server
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
     volumes:
       - agent-vol:/agent
     ports:
-      - 8083:8083
-      - 9093:9093
+      - "8083:8083"
 
   api-gateway:
-    restart: always
     image: inspectit/spring-petclinic-api-gateway:${INSPECTIT_PETCLINIC_VERSION}
     container_name: api-gateway
-    hostname: api-gateway
+    restart: always
     environment:
       - INSPECTIT_SERVICE_NAME=api-gateway
-      - INSPECTIT_CONFIG_HTTP_URL=http://ocelot-config-server:8090/api/v1/agent/configuration
       - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
-      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9094
-      - INSPECTIT_EXPORTERS_TRACING_JAEGER_URL=http://jaeger:14268/api/traces
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 512M
     depends_on:
-      - agent
-      - ocelot-config-server
-      - config-server
-      - discovery-server
-
-    entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=120s","--","java", "-javaagent:/agent/inspectit-ocelot-agent.jar", "org.springframework.boot.loader.JarLauncher"]
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
     volumes:
       - agent-vol:/agent
     ports:
-      - 8080:8080
-      - 9094:9094
+      - "8080:8080"
 
-  #  Monitoring Backend
+  genai-service:
+    image: inspectit/spring-petclinic-genai-service:${INSPECTIT_PETCLINIC_VERSION}
+    container_name: genai-service
+    restart: always
+    environment:
+      - INSPECTIT_SERVICE_NAME=genai-service
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_ENABLED=ENABLED
+      - INSPECTIT_EXPORTERS_METRICS_PROMETHEUS_PORT=9091
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_ENDPOINT=http://otel-collector:4317
+      - INSPECTIT_EXPORTERS_TRACING_OTLP_PROTOCOL=grpc
+      - MANAGEMENT_TRACING_ENABLED=false # disable spring zipkin tracing
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    depends_on:
+      agent:
+        condition: service_started
+      ocelot-config-server:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+    entrypoint: *java_entrypoint
+    volumes:
+      - agent-vol:/agent
+    ports:
+      - "8084:8084"
+
+  ###########################
+  ###  MONITORING BACKEND ###
+  ###########################
 
   #  Load Generator
-  ## Artificial load on Demo
+  ## Artificial load on demo
   load:
-    restart: always
-    image: inspectit/spring-petclinic-load:1.0
+    build:
+      context: load
     container_name: load-generator
-    hostname: load-generator
+    restart: always
+    environment:
+      - LOCUST_WEB_PORT
+      - LOCUST_USERS
+      - LOCUST_HOST
+      - LOCUST_HEADLESS
+      - LOCUST_AUTOSTART
+    ports:
+      - "8089:8089"
+
+  # OpenTelemetry collector
+  ## Collects traces
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.120.0
+    container_name: otel-collector
+    restart: always
+    command: [ "--config=/etc/otelcol-config.yml" ]
+    volumes:
+      - ./otel/otelcol-config.yml:/etc/otelcol-config.yml
+    ports:
+      - "4317:4317"   # OTLP GRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
 
   #  Prometheus
-  ## Time Series Database & Monitoring
+  ## Time Series Database
   prometheus:
-    restart: always
-    image: prom/prometheus:v2.29.1
+    image: prom/prometheus:v3.1.0
     container_name: prometheus
+    restart: always
     command:
       - '--storage.tsdb.retention.time=7d'
       - '--config.file=/etc/prometheus/prometheus.yml'
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - 9090:9090
+      - "9090:9090"
 
   #  Jaeger
-  ## Collects and visualizes traces
+  ## Visualizes traces
   jaeger:
-    restart: always
-    image: jaegertracing/all-in-one:1.25.0
+    image: jaegertracing/all-in-one:1.60
     container_name: jaeger
+    restart: always
     ports:
-      - 16686:16686
+      - "16686:16686"
 
   #  Grafana
   ## Dashboarding
   grafana:
-    restart: always
-    image: grafana/grafana:9.0.2
+    image: grafana/grafana:11.2.0
     container_name: grafana
+    restart: always
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=TRUE
       - GF_SECURITY_ADMIN_PASSWORD=demo
@@ -260,20 +365,23 @@ services:
     volumes:
       - ./grafana/provisioning/prometheus:/usr/share/grafana/custom/
       - ./grafana/provisioning/home-dashboard/home.json:/usr/share/grafana/public/dashboards/home.json
-
     ports:
-      - 3000:3000
+      - "3000:3000"
 
   # Grafana Loki & Promtail
   ## Make logs available in Grafana
   loki:
-    image: grafana/loki:2.5.0
+    image: grafana/loki:3.4.1
+    container_name: loki
+    restart: always
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
 
   promtail:
-    image: grafana/promtail:2.5.0
+    image: grafana/promtail:3.4.1
+    container_name: promtail
+    restart: always
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml

@@ -1,16 +1,19 @@
 - name: "Gateway"
+  sourceBranch: "WORKSPACE"
   sources:
   - "/gateway"
   - "/all"
   attributes:
     service: "api-gateway"
-- name: "Services"
+- name: "Customers"
+  sourceBranch: "WORKSPACE"
   sources:
-  - "/services"
+  - "/customers-service"
   - "/all"
   attributes:
-    service: ".*-service"
+    service: "customers-service"
 - name: "Default Mapping"
+  sourceBranch: "WORKSPACE"
   sources:
   - "/all"
   attributes:
