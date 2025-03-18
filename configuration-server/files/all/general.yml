@@ -20,3 +20,6 @@ inspectit:
   self-monitoring:
     agent-health:
       validity-period: 10m
+  instrumentation:
+    ignored-packages:
+      '[reactor.core.publisher.]': true

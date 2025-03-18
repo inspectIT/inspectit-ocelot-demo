@@ -349,7 +349,6 @@ services:
   ## Dashboarding
   grafana:
     image: grafana/grafana:11.2.0
-    attach: false
     container_name: grafana
     restart: always
     environment:
