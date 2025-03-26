@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -51,8 +51,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -121,7 +122,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "inspectit_self_instrumented_classes{service=\"$service\"} / jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
@@ -137,13 +138,14 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
           "custom": {
+            "align": "auto",
             "cellOptions": {
               "type": "auto"
             },
@@ -256,7 +258,7 @@
           "alias": "# classes loaded by JVM",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
@@ -295,7 +297,7 @@
           "alias": "# instrumented classes",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}",
@@ -335,7 +337,7 @@
           "alias": "# classes pending for analysis",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
           "format": "time_series",
@@ -373,7 +375,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_self_logs_log_events_total{service=\"$service\",level=\"ERROR\"}",
@@ -386,7 +388,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_self_logs_log_events_total{service=\"$service\",level=\"WARN\"}",
@@ -410,9 +412,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "Number of newly logged errors. This metric can display too low numbers in case the agent just restarted!",
       "fieldConfig": {
@@ -480,7 +482,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"FATAL|ERROR\"}[$__range]))",
@@ -495,9 +497,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -565,7 +567,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "1 - (inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}/jvm_classes_loaded{service=\"$service\"})",
@@ -582,9 +584,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -732,7 +734,7 @@
           "alias": "loaded classes",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
@@ -785,7 +787,7 @@
           "alias": "instrumented classes",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}",
@@ -838,7 +840,7 @@
           "alias": "classes pending for analysis",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
@@ -891,9 +893,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "Number of newly logged warnings. This metric can display too low numbers in case the agent just restarted!",
       "fieldConfig": {
@@ -961,7 +963,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"WARN\"}[$__range])",
@@ -976,9 +978,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "Number of newly logged infos. This metric can display too low numbers in case the agent just restarted!",
       "fieldConfig": {
@@ -1042,7 +1044,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "SUM(increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"INFO|DEBUG|TRACE\"}[$__range]))",
@@ -1061,6 +1063,24 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": true,

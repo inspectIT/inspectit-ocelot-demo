@@ -57,9 +57,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -250,7 +250,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0",
           "format": "table",
@@ -263,7 +263,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(increase(http_in_responsetime_sum_milliseconds_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0",
@@ -277,7 +277,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "(sum(increase(http_in_count_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path)) >= 0\nor (sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0) * 0",
           "format": "table",
@@ -301,9 +301,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -387,7 +387,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "(sum(increase(http_in_responsetime_sum_milliseconds_total{service=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_path)\n/ sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_path)) >= 0",
@@ -404,8 +404,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "Incoming HTTP Requests per second for the selected endpoints and applications",
       "fieldConfig": {
@@ -474,7 +475,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__interval]))",
           "format": "time_series",
@@ -491,8 +492,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "The error rate of incoming http requests for the selected endpoints and applications",
       "fieldConfig": {
@@ -564,7 +566,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "(sum(increase(http_in_count_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service=\"$service\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_in_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) > 0) * 0",
           "format": "time_series",
@@ -581,9 +583,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -828,7 +830,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(label_join(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__range]), \"http_url\", \"\", \"http_host\", \"http_path\")) by (http_url) > 0",
           "format": "table",
@@ -841,7 +843,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "label_join(sum(increase(http_out_responsetime_sum_milliseconds_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) \n/ sum(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) > 0, \"http_url\", \"\", \"http_host\", \"http_path\")",
@@ -856,7 +858,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "label_join((sum(increase(http_out_count_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path)) >= 0\nor (sum(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) > 0) * 0 , \"http_url\", \"\", \"http_host\", \"http_path\")",
           "format": "table",
@@ -881,9 +883,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -970,7 +972,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "(sum(increase(http_out_responsetime_sum_milliseconds_total{service=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_host,http_path)\n/ sum(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_host,http_path)) >= 0",
@@ -987,8 +989,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "Outgoing HTTP Requests per second issued towards the selected endpoints from the given application",
       "fieldConfig": {
@@ -1057,7 +1060,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__interval]))",
           "format": "time_series",
@@ -1074,8 +1077,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "The error rate of outgoing http requests issued towards the selected endpoints of the selected application",
       "fieldConfig": {
@@ -1147,7 +1151,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "(sum(increase(http_out_count_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service=\"$service\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_out_count_total{service=\"$service\",http_path=~\"$path\"}[$__range])) > 0) * 0",
           "format": "time_series",
@@ -1168,6 +1172,24 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": true,

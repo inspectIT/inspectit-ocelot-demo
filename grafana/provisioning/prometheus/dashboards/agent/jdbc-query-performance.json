@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -87,9 +88,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -144,7 +145,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
@@ -159,9 +160,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -245,7 +246,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
@@ -264,6 +265,25 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "allValue": ".*",
         "current": {
@@ -357,6 +377,6 @@
   "timezone": "",
   "title": "JDBC Query Performance",
   "uid": "vyCYBbg7z",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

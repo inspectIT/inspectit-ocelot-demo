@@ -31,9 +31,9 @@
   "panels": [
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 32,
@@ -164,7 +164,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(increase(service_in_count_total{service=~\"$service\"}[$__range]) or increase(service_in_count_total{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
           "format": "table",
@@ -177,7 +177,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(increase(service_out_count_total{service=~\"$service\"}[$__range]) or increase(service_out_count_total{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
           "format": "table",
@@ -190,7 +190,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(increase(service_in_responsetime_sum_milliseconds_total{service=~\"$service\"}[$__range]) or increase(service_in_responsetime_sum_milliseconds_total{origin_service=~\"$service\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
@@ -204,7 +204,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(increase(service_out_responsetime_sum_milliseconds_total{service=~\"$service\"}[$__range]) or increase(service_out_responsetime_sum_milliseconds_total{target_service=~\"$service\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
@@ -218,7 +218,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(increase(service_in_count_total{service=~\"$service\",error=\"true\"}[$__range]) or increase(service_in_count_total{origin_service=~\"$service\",error=\"true\"}[$__range]) >= 0) by (service,origin_service,origin_external,protocol) > 0",
           "format": "table",
@@ -230,7 +230,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "sum(increase(service_out_count_total{service=~\"$service\",error=\"true\"}[$__range]) or increase(service_out_count_total{target_service=~\"$service\",error=\"true\"}[$__range]) >= 0) by (service,target_service,target_external,protocol) > 0",
           "format": "table",
@@ -249,6 +249,24 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": false,
