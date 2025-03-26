@@ -361,7 +361,8 @@ services:
       - GF_PANELS_DISABLE_SANITIZE_HTML=TRUE
       - GF_SECURITY_ADMIN_PASSWORD=demo
       - GF_PATHS_PROVISIONING=/usr/share/grafana/custom/
-      - GF_INSTALL_PLUGINS=https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/releases/download/v4.0.2/novatec-sdg-panel.zip;novatec-sdg-panel
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=novatec-sdg-panel # TODO remove after official release
+      - GF_INSTALL_PLUGINS=https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/releases/download/v4.2.0/novatec-sdg-panel.zip;novatec-sdg-panel
     volumes:
       - ./grafana/provisioning/prometheus:/usr/share/grafana/custom/
       - ./grafana/provisioning/home-dashboard/home.json:/usr/share/grafana/public/dashboards/home.json
