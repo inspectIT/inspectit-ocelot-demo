@@ -18,14 +18,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 5,
   "links": [],
   "panels": [
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -79,7 +79,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -95,9 +95,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -150,7 +150,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "avg(sum_over_time(inspectit_eum_self_beacons_processor_duration_sum[$__interval]) / sum_over_time(inspectit_eum_self_beacons_processor_count[$__interval]))",
@@ -177,9 +177,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -261,7 +261,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "avg_over_time(inspectit_eum_self_beacons_processor_duration_sum[$__interval]) / avg_over_time(inspectit_eum_self_beacons_processor_count[$__interval])",
@@ -276,9 +276,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -350,7 +350,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "avg_over_time(inspectit_eum_self_beacons_processor_duration_sum[$__interval]) / avg_over_time(inspectit_eum_self_beacons_processor_count[$__interval])",
@@ -406,7 +406,26 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-30m",
@@ -416,6 +435,6 @@
   "timezone": "",
   "title": "Beacons",
   "uid": "f6YQCSqGk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
