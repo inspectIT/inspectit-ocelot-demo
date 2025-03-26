@@ -4,7 +4,10 @@
       {
         "$$hashKey": "object:728",
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -14,13 +17,17 @@
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1629379201350,
+  "id": 5,
   "links": [],
   "panels": [
     {
-      "datasource": "LocalInflux",
+      "datasource": {
+        "name": "${datasource}",
+        "type": "influxdb",
+        "uid": "${datasource}"
+      },
       "gridPos": {
         "h": 20,
         "w": 22,
@@ -28,7 +35,6 @@
         "y": 0
       },
       "id": 4,
-      "links": [],
       "options": {
         "aggregationType": "service",
         "baselineRtUpper": "threshold",
@@ -39,6 +45,8 @@
           "errorRateOutgoingColumn": "error_out",
           "extOrigin": "",
           "extTarget": "",
+          "namespaceColumn": "namespace",
+          "namespaceDelimiter": ".",
           "requestRateColumn": "in_count",
           "requestRateOutgoingColumn": "out_count",
           "responseTimeColumn": "in_timesum",
@@ -144,10 +152,14 @@
         "timeFormat": "m",
         "type": "type"
       },
-      "pluginVersion": "4.0.2",
+      "pluginVersion": "4.2.0",
       "targets": [
         {
           "alias": "in_count",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${datasource}"
+          },
           "groupBy": [
             {
               "params": [
@@ -187,6 +199,10 @@
           "tags": []
         },
         {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${datasource}"
+          },
           "groupBy": [
             {
               "params": [
@@ -225,6 +241,10 @@
           "tags": []
         },
         {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${datasource}"
+          },
           "groupBy": [
             {
               "params": [
@@ -263,6 +283,10 @@
           "tags": []
         },
         {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${datasource}"
+          },
           "groupBy": [
             {
               "params": [
@@ -302,6 +326,10 @@
         },
         {
           "alias": "in_count",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${datasource}"
+          },
           "groupBy": [
             {
               "params": [
@@ -341,6 +369,10 @@
           "tags": []
         },
         {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${datasource}"
+          },
           "groupBy": [
             {
               "params": [
@@ -384,22 +416,37 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 30,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "agent"
   ],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
           "selected": true,
+          "text": "LocalInflux",
+          "value": "P91175AC4AE38585B"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "influxdb",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
           "text": "service",
           "value": "service"
         },
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
         "label": "",
@@ -427,10 +474,11 @@
             "$__all"
           ]
         },
-        "datasource": "LocalInflux",
+        "datasource": {
+          "type": "influxdb",
+          "uid": "P91175AC4AE38585B"
+        },
         "definition": "SHOW TAG VALUES WITH KEY=\"service\"",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Service",
@@ -450,7 +498,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -481,5 +529,6 @@
   "timezone": "",
   "title": "Service Graph",
   "uid": "Kx4wbZRZk",
-  "version": 1
+  "version": 3,
+  "weekStart": ""
 }

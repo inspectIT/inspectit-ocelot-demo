@@ -95,9 +95,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -242,7 +242,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "process_cpu_usage_cores{service=\"$service\"}",
@@ -257,7 +257,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "system_cpu_usage_cores{service=\"$service\"}",
@@ -275,9 +275,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -413,7 +413,7 @@
           "alias": "max",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(jvm_memory_max_bytes{service=\"$service\", area=\"heap\"})",
@@ -475,7 +475,7 @@
           "alias": "committed",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(jvm_memory_committed_bytes{service=\"$service\", area=\"heap\"})",
@@ -537,7 +537,7 @@
           "alias": "used",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(jvm_memory_used_bytes{service=\"$service\", area=\"heap\"})",
@@ -601,8 +601,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -790,7 +791,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_threads_daemon{service=\"$service\"}",
           "format": "time_series",
@@ -803,7 +804,7 @@
           "alias": "$tag_state",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_threads_live{service=\"$service\"} - jvm_threads_daemon{service=\"$service\"}",
           "format": "time_series",
@@ -861,7 +862,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_threads_peak{service=\"$service\"} - jvm_threads_live{service=\"$service\"}",
           "format": "time_series",
@@ -876,9 +877,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1015,7 +1016,7 @@
           "alias": "Live Data Size",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "jvm_gc_live_data_size_bytes{service=\"$service\"}",
@@ -1071,7 +1072,7 @@
           "alias": "Max Data Size",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "jvm_gc_max_data_size_bytes{service=\"$service\"}",
@@ -1127,7 +1128,7 @@
           "alias": "Allocated Memory",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "idelta(jvm_gc_memory_allocated_bytes_total{service=\"$service\"}[$__range])",
@@ -1180,7 +1181,7 @@
           "alias": "Promoted Memory",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "idelta(jvm_gc_memory_promoted_bytes_total{service=\"$service\"}[$__range])",
@@ -1237,7 +1238,7 @@
       "datasource": {
         "default": false,
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1305,7 +1306,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "process_cpu_usage_cores{service=\"$service\"}",
@@ -1347,8 +1348,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1415,7 +1417,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_classes_loaded{service=\"$service\"}",
           "format": "time_series",
@@ -1462,9 +1464,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1600,7 +1602,7 @@
           "alias": "max",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(jvm_memory_max_bytes{service=\"$service\", area=\"nonheap\"})",
@@ -1661,7 +1663,7 @@
           "alias": "committed",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(jvm_memory_committed_bytes{service=\"$service\", area=\"nonheap\"})",
@@ -1722,7 +1724,7 @@
           "alias": "used",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(jvm_memory_used_bytes{service=\"$service\", area=\"nonheap\"})",
@@ -1785,8 +1787,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1869,7 +1872,7 @@
           "alias": "$tag_state",
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_threads_states{service=\"$service\"}",
           "format": "time_series",
@@ -1930,9 +1933,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2029,7 +2032,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(idelta(jvm_gc_pause_milliseconds_total{service=\"$service\", action=\"end of minor GC\"}[$__range]))",
@@ -2042,7 +2045,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "idelta(jvm_gc_pause_milliseconds_total{service=\"$service\", action=\"end of major GC\"}[$__range])",
@@ -2058,8 +2061,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2126,7 +2130,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "expr": "jvm_classes_unloaded{service=\"$service\"}",
           "format": "time_series",
@@ -2211,6 +2215,24 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": true,

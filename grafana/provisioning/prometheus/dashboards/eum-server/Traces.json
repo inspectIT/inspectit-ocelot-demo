@@ -18,14 +18,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 6,
   "links": [],
   "panels": [
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -80,7 +80,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_eum_self_traces_received_count",
@@ -95,9 +95,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -150,7 +150,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "avg_over_time(inspectit_eum_self_traces_received_duration_sum[$__interval]) / avg_over_time(inspectit_eum_self_traces_received_count[$__interval])",
@@ -165,9 +165,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -224,7 +224,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_eum_self_traces_received_count{is_error=\"true\"}",
@@ -278,9 +278,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -362,7 +362,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_eum_self_traces_received_count{is_error=\"false\"}",
@@ -374,7 +374,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_eum_self_traces_received_count{is_error=\"true\"}",
@@ -390,9 +390,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -474,7 +474,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "avg_over_time(inspectit_eum_self_traces_received_duration_sum[$__interval]) / avg_over_time(inspectit_eum_self_traces_received_count[$__interval])",
@@ -489,9 +489,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "prometheus",
-        "uid": "P93B0DC4442ABD976"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -573,7 +573,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P93B0DC4442ABD976"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "inspectit_eum_self_traces_span_size_sum",
@@ -591,7 +591,27 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "LocalPrometheus",
+          "value": "P93B0DC4442ABD976"
+        },
+        "description": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-1h",
@@ -601,6 +621,6 @@
   "timezone": "",
   "title": "Trace Controller",
   "uid": "-Lqc_TRnk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

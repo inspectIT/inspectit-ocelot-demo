@@ -50,8 +50,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -120,7 +121,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -163,12 +164,101 @@
       "type": "stat"
     },
     {
-      "columns": [],
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
-      "fontSize": "120%",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "decimals": 2,
+          "displayName": "",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time"
+              },
+              {
+                "id": "custom.hidden",
+                "value": true
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Metric"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Description"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Count"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 6,
@@ -176,73 +266,25 @@
         "y": 1
       },
       "id": 47,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 1,
-        "desc": false
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
       },
-      "styles": [
-        {
-          "alias": "Time",
-          "align": "auto",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "Description",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Metric",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Count",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value",
-          "thresholds": [],
-          "type": "number",
-          "unit": "none"
-        },
-        {
-          "alias": "",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "alias": "# classes loaded by JVM",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [],
           "measurement": "jvm_classes_loaded",
@@ -276,7 +318,7 @@
           "alias": "# instrumented classes",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [],
           "measurement": "inspectit_self_instrumented_classes",
@@ -310,7 +352,7 @@
           "alias": "# classes pending for analysis",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [],
           "measurement": "inspectit_self_instrumentation_queue_size",
@@ -342,13 +384,21 @@
         }
       ],
       "title": "Instrumentation State",
-      "transform": "timeseries_to_rows",
-      "type": "table-old"
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {
+            "reducers": []
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -416,7 +466,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -461,8 +511,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -528,7 +579,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -589,8 +640,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -774,7 +826,7 @@
           "alias": "loaded classes",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -821,7 +873,7 @@
           "alias": "instrumented classes",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -868,7 +920,7 @@
           "alias": "classes pending for analysis",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -915,7 +967,7 @@
           "alias": "JVM CPU Utilization",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -964,8 +1016,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1031,7 +1084,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -1092,8 +1145,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1159,7 +1213,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -1227,6 +1281,25 @@
       {
         "current": {
           "selected": true,
+          "text": "LocalInflux",
+          "value": "P91175AC4AE38585B"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "influxdb",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": true,
           "text": [
             "All"
           ],
@@ -1288,6 +1361,6 @@
   "timezone": "",
   "title": "inspectIT Agent Self-Monitoring",
   "uid": "D-EaVt_ik",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
