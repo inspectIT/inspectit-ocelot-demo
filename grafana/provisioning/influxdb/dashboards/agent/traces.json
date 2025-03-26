@@ -24,15 +24,15 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
-  "iteration": 1658143921830,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "jaeger",
-        "uid": "${Traces}"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 24,
@@ -45,7 +45,7 @@
         {
           "datasource": {
             "type": "jaeger",
-            "uid": "${Traces}"
+            "uid": "${datasource}"
           },
           "query": "$traceId",
           "refId": "A"
@@ -55,21 +55,21 @@
       "type": "traces"
     }
   ],
-  "schemaVersion": 36,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "",
-          "value": ""
+          "text": "Jaeger",
+          "value": "PC9A941E8F2E49454"
         },
-        "hide": 2,
+        "hide": 0,
         "includeAll": false,
+        "label": "Datasource",
         "multi": false,
-        "name": "Traces",
+        "name": "datasource",
         "options": [],
         "query": "jaeger",
         "refresh": 1,
@@ -88,7 +88,7 @@
         "name": "traceId",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "2c3c015c1dfed123fa630f436fd82ffa",
             "value": "2c3c015c1dfed123fa630f436fd82ffa"
           }
@@ -107,6 +107,6 @@
   "timezone": "",
   "title": "Traces",
   "uid": "4GYTDFRVk",
-  "version": 5,
+  "version": 3,
   "weekStart": ""
 }

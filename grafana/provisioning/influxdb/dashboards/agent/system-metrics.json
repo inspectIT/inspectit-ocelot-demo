@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 9,
   "links": [],
   "panels": [
     {
@@ -50,9 +50,9 @@
     },
     {
       "datasource": {
-        "default": false,
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -121,7 +121,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -166,8 +166,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -284,7 +285,7 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 8,
+        "w": 9,
         "x": 3,
         "y": 1
       },
@@ -306,7 +307,7 @@
           "alias": "CPU Utilization",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -354,7 +355,7 @@
           "alias": "Load Average",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -403,8 +404,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -473,7 +475,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -524,8 +526,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -639,7 +642,7 @@
           "alias": "total capacity",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -687,7 +690,7 @@
           "alias": "used",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -738,8 +741,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -801,7 +805,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [],
           "measurement": "system_cpu_count",
@@ -838,8 +842,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -905,7 +910,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [],
           "measurement": "disk_free",
@@ -946,6 +951,25 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "LocalInflux",
+          "value": "P91175AC4AE38585B"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "influxdb",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": true,

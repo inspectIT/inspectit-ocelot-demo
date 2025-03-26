@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 3,
   "links": [],
   "panels": [
     {
@@ -51,8 +51,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -234,13 +235,13 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.4.16",
+      "pluginVersion": "11.2.0",
       "repeatDirection": "h",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -282,7 +283,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -345,8 +346,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -361,6 +363,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -431,7 +434,7 @@
           "alias": "$tag_http_path",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "expr": "(sum(increase(http_in_responsetime_sum{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__interval])) by (http_path)\n/ sum(increase(http_in_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__interval])) by (http_path)) >= 0",
           "format": "time_series",
@@ -480,8 +483,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "description": "Incoming HTTP Requests per second for the selected endpoints and applications",
       "fieldConfig": {
@@ -534,6 +538,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -545,12 +550,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.16",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(http_in_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__interval]))",
           "format": "time_series",
@@ -598,8 +603,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "description": "The error rate of incoming http requests for the selected endpoints and applications",
       "fieldConfig": {
@@ -655,6 +661,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -666,12 +673,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.16",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "expr": "(sum(increase(http_in_count{http_status!~\"(1|2|3)\\\\d\\\\d\",service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_in_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_in_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range])) > 0) * 0",
           "format": "time_series",
@@ -719,8 +726,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -926,13 +934,13 @@
           }
         ]
       },
-      "pluginVersion": "10.4.16",
+      "pluginVersion": "11.2.0",
       "repeatDirection": "h",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "expr": "sum(label_join(increase(http_out_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range]), \"http_url\", \"\", \"http_host\", \"http_path\")) by (http_url) > 0",
           "format": "table",
@@ -978,7 +986,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -1041,8 +1049,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -1057,6 +1066,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1127,7 +1137,7 @@
           "alias": "$tag_http_host$tag_http_path",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -1171,8 +1181,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "description": "Outgoing HTTP Requests per second issued towards the selected endpoints from the given application",
       "fieldConfig": {
@@ -1225,6 +1236,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -1236,12 +1248,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.16",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(http_out_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__interval]))",
           "format": "time_series",
@@ -1289,8 +1301,9 @@
     },
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "description": "The error rate of outgoing http requests issued towards the selected endpoints of the selected application",
       "fieldConfig": {
@@ -1346,6 +1359,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -1357,12 +1371,12 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.16",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "expr": "(sum(increase(http_out_count{http_status!~\"(1|2|3)\\\\d\\\\d\",service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_out_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_out_count{service=\"$service\",application=~\"$application\",http_path=~\"$path\"}[$__range])) > 0) * 0",
           "format": "time_series",
@@ -1414,6 +1428,25 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "LocalInflux",
+          "value": "P91175AC4AE38585B"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "influxdb",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": true,
@@ -1511,6 +1544,6 @@
   "timezone": "",
   "title": "HTTP Overview",
   "uid": "523wqxqmz",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

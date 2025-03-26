@@ -19,13 +19,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 5,
   "links": [],
   "panels": [
     {
       "datasource": {
+        "name": "${datasource}",
         "type": "influxdb",
-        "uid": "P91175AC4AE38585B"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 20,
@@ -157,7 +158,7 @@
           "alias": "in_count",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -200,7 +201,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -242,7 +243,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -284,7 +285,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -327,7 +328,7 @@
           "alias": "in_count",
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -370,7 +371,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P91175AC4AE38585B"
+            "uid": "${datasource}"
           },
           "groupBy": [
             {
@@ -421,6 +422,25 @@
   ],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "LocalInflux",
+          "value": "P91175AC4AE38585B"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "influxdb",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
       {
         "current": {
           "selected": false,
@@ -509,6 +529,6 @@
   "timezone": "",
   "title": "Service Graph",
   "uid": "Kx4wbZRZk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
