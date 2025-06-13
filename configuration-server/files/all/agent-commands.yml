@@ -2,3 +2,15 @@ inspectit:
   agent-commands:
     enabled: true
     derive-from-http-config-url: true
+    polling-interval: 10s
+    
+  # get information about the currently applied instrumentation in status table
+  instrumentation-feedback:
+    enabled: true
+    include-rules: false
+  
+  # get preloaded logs in status table
+  log-preloading:
+    enabled: true
+    # the used log level and higher
+    log-level: WARN
