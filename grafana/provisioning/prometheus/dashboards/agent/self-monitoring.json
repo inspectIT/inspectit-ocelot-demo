@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -51,7 +51,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -124,7 +124,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "inspectit_self_instrumented_classes{service=\"$service\"} / jvm_classes_loaded{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "inspectit_self_instrumented_classes{service_name=\"$service\"} / jvm_classes_loaded_classes{service_name=\"$service\"}",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -138,7 +139,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -260,7 +261,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_classes_loaded{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_classes_loaded_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
           "instant": true,
@@ -300,7 +302,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}",
+          "expr": "inspectit_self_instrumentation_queue_size_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
           "instant": true,
@@ -339,7 +341,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "inspectit_self_instrumented_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
           "instant": true,
@@ -378,7 +381,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "inspectit_self_logs_log_events_total{service=\"$service\",level=\"ERROR\"}",
+          "expr": "inspectit_self_logs_log_events_total{service_name=\"$service\",level=\"ERROR\"}",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -391,7 +394,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "inspectit_self_logs_log_events_total{service=\"$service\",level=\"WARN\"}",
+          "expr": "inspectit_self_logs_log_events_total{service_name=\"$service\",level=\"WARN\"}",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -412,7 +415,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -485,7 +488,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"FATAL|ERROR\"}[$__range]))",
+          "expr": "sum(increase(inspectit_self_logs_log_events_total{service_name=~\"$service\",level=~\"FATAL|ERROR\"}[$__range]))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -497,7 +500,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -570,7 +573,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "1 - (inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}/jvm_classes_loaded{service=\"$service\"})",
+          "expr": "1 - (inspectit_self_instrumentation_queue_size_classes{service_name=\"$service\"}/jvm_classes_loaded_classes{service_name=\"$service\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -584,7 +587,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -737,7 +740,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "inspectit_self_instrumented_classes{service=\"$service\"}",
+          "expr": "inspectit_self_instrumented_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -790,7 +793,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "inspectit_self_instrumentation_queue_size_classes{service=\"$service\"}",
+          "expr": "inspectit_self_instrumentation_queue_size_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -842,7 +845,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_classes_loaded{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_classes_loaded_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -863,6 +867,7 @@
           "measurement": "inspectit_self_instrumentation_analysis_queue_size",
           "orderByTime": "ASC",
           "policy": "default",
+          "range": true,
           "refId": "C",
           "resultFormat": "time_series",
           "select": [
@@ -893,7 +898,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -966,7 +971,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"WARN\"}[$__range])",
+          "expr": "increase(inspectit_self_logs_log_events_total{service_name=~\"$service\",level=~\"WARN\"}[$__range])",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -978,7 +983,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -1047,7 +1052,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "SUM(increase(inspectit_self_logs_log_events_total{service=~\"$service\",level=~\"INFO|DEBUG|TRACE\"}[$__range]))",
+          "expr": "SUM(increase(inspectit_self_logs_log_events_total{service_name=~\"$service\",level=~\"INFO|DEBUG|TRACE\"}[$__range]))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -1095,13 +1100,17 @@
           "type": "prometheus",
           "uid": "P93B0DC4442ABD976"
         },
-        "definition": "label_values(service)",
+        "definition": "label_values(service_name)",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "service",
         "options": [],
-        "query": "label_values(service)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(service_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1145,6 +1154,6 @@
   "timezone": "",
   "title": "inspectIT Agent Self-Monitoring",
   "uid": "oG69sg5Zk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

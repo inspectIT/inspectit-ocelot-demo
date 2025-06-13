@@ -64,6 +64,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 8,
   "links": [],
   "panels": [
     {
@@ -95,7 +96,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -245,7 +246,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "process_cpu_usage_cores{service=\"$service\"}",
+          "expr": "process_cpu_usage_cores{service_name=\"$service\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "process_cpu_usage",
@@ -260,7 +261,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "system_cpu_usage_cores{service=\"$service\"}",
+          "expr": "system_cpu_usage_cores{service_name=\"$service\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "system_cpu_usage",
@@ -275,7 +276,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -416,7 +417,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_max_bytes{service=\"$service\", area=\"heap\"})",
+          "expr": "sum(jvm_memory_max_bytes{service_name=\"$service\", area=\"heap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -478,7 +479,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_committed_bytes{service=\"$service\", area=\"heap\"})",
+          "expr": "sum(jvm_memory_committed_bytes{service_name=\"$service\", area=\"heap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -540,7 +541,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_used_bytes{service=\"$service\", area=\"heap\"})",
+          "expr": "sum(jvm_memory_used_bytes{service_name=\"$service\", area=\"heap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -601,7 +602,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -793,11 +794,13 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_threads_daemon{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_threads_daemon_threads{service_name=\"$service\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "daemon",
           "query": "from(bucket: \"telegraf\")\n|> range($range)\n|> filter(fn: (r) =>\n  r._measurement == \"jvm_threads_daemon\" AND\n  r.service == \"$service\" AND\n  r._field == \"gauge\")\n|> map(fn:(r) => ({\n        _time: r._time,\n        _value: r._value,\n        _measurement: \"daemon\"\n    }))\n|> keep(columns: [\"_value\", \"_time\", \"_measurement\"])",
+          "range": true,
           "refId": "B"
         },
         {
@@ -806,7 +809,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_threads_live{service=\"$service\"} - jvm_threads_daemon{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_threads_live_threads{service_name=\"$service\"} - jvm_threads_daemon{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -834,6 +838,7 @@
           "orderByTime": "ASC",
           "policy": "default",
           "query": "lnd = () => {\nlive = from(bucket: \"telegraf\")\n|> range($range)\n|> filter(fn: (r) =>\n  r._measurement == \"jvm_threads_live\" AND\n  r.service == \"$service\" AND\n  r._field == \"gauge\")\n|> keep(columns: [\"_value\", \"_time\", \"_measurement\"])\n  \ndaemon = from(bucket: \"telegraf\")\n|> range($range)\n|> filter(fn: (r) =>\n  r._measurement == \"jvm_threads_daemon\" AND\n  r.service == \"$service\" AND\n  r._field == \"gauge\")\n|> keep(columns: [\"_value\", \"_time\", \"_measurement\"])\n  \nreturn join(tables:{live:live, daemon:daemon},on:[\"_time\",\"_stop\",\"_start\", \"host\"])\n    |> map(fn:(r) => ({\n        _time: r._time,\n        _value: (r._value_live - r._value_daemon),\n        _measurement: \"non-daemon\"\n    }))\n}\n\nlnd()",
+          "range": true,
           "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
@@ -864,11 +869,13 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_threads_peak{service=\"$service\"} - jvm_threads_live{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_threads_peak_threads{service_name=\"$service\"} - jvm_threads_live_threads{service_name=\"$service\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "peak",
           "query": "stackedPeak = () => {\npeak = from(bucket: \"telegraf\")\n|> range($range)\n|> filter(fn: (r) =>\n  r._measurement == \"jvm_threads_peak\" AND\n  r.service == \"$service\" AND\n  r._field == \"gauge\")\n|> keep(columns: [\"_value\", \"_time\", \"_measurement\"])\n\nlive = from(bucket: \"telegraf\")\n|> range($range)\n|> filter(fn: (r) =>\n  r._measurement == \"jvm_threads_live\" AND\n  r.service == \"$service\" AND\n  r._field == \"gauge\")\n|> keep(columns: [\"_value\", \"_time\", \"_measurement\"])\n  \n\n  \nreturn join(tables:{live:live, peak:peak},on:[\"_time\",\"_stop\",\"_start\", \"host\"])\n    |> map(fn:(r) => ({\n        _time: r._time,\n        _value: (r._value_peak - r._value_live),\n        _measurement: \"peak\"\n    }))\n}\n\nstackedPeak()",
+          "range": true,
           "refId": "C"
         }
       ],
@@ -877,7 +884,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -1019,7 +1026,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "jvm_gc_live_data_size_bytes{service=\"$service\"}",
+          "expr": "jvm_gc_live_data_size_bytes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1075,7 +1082,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "jvm_gc_max_data_size_bytes{service=\"$service\"}",
+          "expr": "jvm_gc_max_data_size_bytes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1131,7 +1138,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "idelta(jvm_gc_memory_allocated_bytes_total{service=\"$service\"}[$__range])",
+          "expr": "idelta(jvm_gc_memory_allocated_bytes_total{service_name=\"$service\"}[$__range])",
           "format": "time_series",
           "groupBy": [
             {
@@ -1184,7 +1191,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "idelta(jvm_gc_memory_promoted_bytes_total{service=\"$service\"}[$__range])",
+          "expr": "idelta(jvm_gc_memory_promoted_bytes_total{service_name=\"$service\"}[$__range])",
           "format": "time_series",
           "groupBy": [
             {
@@ -1309,7 +1316,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "process_cpu_usage_cores{service=\"$service\"}",
+          "expr": "process_cpu_usage_cores{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [],
           "instant": true,
@@ -1348,7 +1355,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -1419,7 +1426,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_classes_loaded{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_classes_loaded_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1464,7 +1472,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -1605,7 +1613,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_max_bytes{service=\"$service\", area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_max_bytes{service_name=\"$service\", area=\"nonheap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -1666,7 +1674,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_committed_bytes{service=\"$service\", area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_committed_bytes{service_name=\"$service\", area=\"nonheap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -1727,7 +1735,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(jvm_memory_used_bytes{service=\"$service\", area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_used_bytes{service_name=\"$service\", area=\"nonheap\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -1787,7 +1795,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -1874,7 +1882,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_threads_states{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_threads_states_threads{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1902,6 +1911,7 @@
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT mean(\"gauge\") FROM \"jvm_memory_max\" WHERE (\"service\" =~ /^$service$/) AND $timeFilter GROUP BY time(1m) fill(null)",
+          "range": true,
           "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1933,7 +1943,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -2035,7 +2045,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(idelta(jvm_gc_pause_milliseconds_total{service=\"$service\", action=\"end of minor GC\"}[$__range]))",
+          "expr": "sum(idelta(jvm_gc_pause_milliseconds_total{service_name=\"$service\", action=\"end of minor GC\"}[$__range]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Minor GC",
@@ -2048,7 +2058,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "idelta(jvm_gc_pause_milliseconds_total{service=\"$service\", action=\"end of major GC\"}[$__range])",
+          "expr": "idelta(jvm_gc_pause_milliseconds_total{service_name=\"$service\", action=\"end of major GC\"}[$__range])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Major GC",
@@ -2061,7 +2071,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -2132,7 +2142,8 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "jvm_classes_unloaded{service=\"$service\"}",
+          "editorMode": "code",
+          "expr": "jvm_classes_unloaded_classes{service_name=\"$service\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -2247,13 +2258,17 @@
           "type": "prometheus",
           "uid": "P93B0DC4442ABD976"
         },
-        "definition": "label_values(service)",
+        "definition": "label_values(service_name)",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "service",
         "options": [],
-        "query": "label_values(service)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(service_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2297,6 +2312,6 @@
   "timezone": "",
   "title": "JVM Metrics",
   "uid": "D65bST8iz",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }
