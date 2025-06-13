@@ -19,6 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -165,13 +166,14 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
           "custom": {
+            "align": "auto",
             "cellOptions": {
               "type": "auto"
             },
@@ -308,7 +310,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -342,7 +344,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -376,7 +378,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -396,7 +398,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -485,7 +487,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT 1 - LAST(\"queuesize\")/LAST(\"loaded\") FROM instrumentation_state WHERE $timeFilter AND service =~ /^$service/",
+          "query": "SELECT 1 - LAST(\"queuesize\")/LAST(\"loaded\") FROM instrumentation_state WHERE $timeFilter AND \"service.name\" =~ /^$service/",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -511,7 +513,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -598,7 +600,7 @@
           "measurement": "inspectit_self_logs",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\") FROM \"inspectit_self_logs\" WHERE (\"service\" =~ /^$service$/ AND \"level\" =~ /^ERROR$/ ) AND $timeFilter",
+          "query": "SELECT SUM(\"counter\") FROM \"inspectit_self_logs\" WHERE (\"service.name\" =~ /^$service$/ AND \"level\" =~ /^ERROR$/ ) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -640,7 +642,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -863,7 +865,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -910,7 +912,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -957,7 +959,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -1004,7 +1006,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -1016,7 +1018,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1103,7 +1105,7 @@
           "measurement": "inspectit_self_logs",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\") FROM \"inspectit_self_logs\" WHERE (\"service\" =~ /^$service$/ AND \"level\" =~ /^WARN$/ ) AND $timeFilter",
+          "query": "SELECT SUM(\"counter\") FROM \"inspectit_self_logs\" WHERE (\"service.name\" =~ /^$service$/ AND \"level\" =~ /^WARN$/ ) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1145,7 +1147,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1232,7 +1234,7 @@
           "measurement": "inspectit_self_logs",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\") FROM \"inspectit_self_logs\" WHERE (\"service\" =~ /^$service$/ AND \"level\" =~ /^INFO|DEBUG|TRACE$/ ) AND $timeFilter",
+          "query": "SELECT SUM(\"counter\") FROM \"inspectit_self_logs\" WHERE (\"service.name\" =~ /^$service$/ AND \"level\" =~ /^INFO|DEBUG|TRACE$/ ) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1280,7 +1282,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "LocalInflux",
           "value": "P91175AC4AE38585B"
         },
@@ -1311,13 +1313,16 @@
           "type": "influxdb",
           "uid": "P91175AC4AE38585B"
         },
-        "definition": "SHOW TAG VALUES WITH KEY = \"service\"",
+        "definition": "SHOW TAG VALUES WITH KEY = \"service.name\"",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "service",
         "options": [],
-        "query": "SHOW TAG VALUES WITH KEY = \"service\"",
+        "query": {
+          "query": "SHOW TAG VALUES WITH KEY = \"service.name\"",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,

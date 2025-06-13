@@ -41,7 +41,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -73,7 +73,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -259,7 +259,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -307,7 +307,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -319,7 +319,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -477,7 +477,7 @@
           "measurement": "jvm_memory_max",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_max WHERE $timeFilter AND area = 'heap' AND service =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(linear)",
+          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_max WHERE $timeFilter AND area = 'heap' AND \"service.name\" =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(linear)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -532,7 +532,7 @@
           "measurement": "jvm_memory_committed",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_committed WHERE $timeFilter AND area = 'heap' AND service =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(linear)",
+          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_committed WHERE $timeFilter AND area = 'heap' AND \"service.name\" =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(linear)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -587,7 +587,7 @@
           "measurement": "jvm_memory_used",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_used WHERE $timeFilter AND area = 'heap' AND service =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(linear)",
+          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_used WHERE $timeFilter AND area = 'heap' AND \"service.name\" =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(linear)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -625,7 +625,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -832,7 +832,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -880,7 +880,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -928,7 +928,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -940,7 +940,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1119,7 +1119,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -1193,7 +1193,7 @@
           "measurement": "jvm_gc_memory_allocated",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\") FROM \"jvm_gc_memory_allocated\" WHERE (\"service\" =~ /^$service$/) AND $timeFilter GROUP BY time($__interval)",
+          "query": "SELECT SUM(\"counter\") FROM \"jvm_gc_memory_allocated\" WHERE (\"service.name\" =~ /^$service$/) AND $timeFilter GROUP BY time($__interval)",
           "rawQuery": true,
           "refId": "D",
           "resultFormat": "time_series",
@@ -1241,7 +1241,7 @@
           "measurement": "jvm_gc_memory_promoted",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\")  FROM \"jvm_gc_memory_promoted\" WHERE (\"service\" =~ /^$service$/) AND $timeFilter GROUP BY time($__interval)",
+          "query": "SELECT SUM(\"counter\")  FROM \"jvm_gc_memory_promoted\" WHERE (\"service.name\" =~ /^$service$/) AND $timeFilter GROUP BY time($__interval)",
           "rawQuery": true,
           "refId": "F",
           "resultFormat": "time_series",
@@ -1277,7 +1277,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1371,7 +1371,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -1383,7 +1383,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1477,7 +1477,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -1489,7 +1489,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1647,7 +1647,7 @@
           "measurement": "jvm_memory_max",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_max WHERE $timeFilter AND area = 'nonheap' AND service =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(previous)",
+          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_max WHERE $timeFilter AND area = 'nonheap' AND \"service.name\" =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(previous)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1702,7 +1702,7 @@
           "measurement": "jvm_memory_committed",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_committed WHERE $timeFilter AND area = 'nonheap' AND service =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(previous)",
+          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_committed WHERE $timeFilter AND area = 'nonheap' AND \"service.name\" =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(previous)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -1757,7 +1757,7 @@
           "measurement": "jvm_memory_used",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_used WHERE $timeFilter AND area = 'nonheap' AND service =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(previous)",
+          "query": "SELECT SUM(val) FROM (SELECT mean(value) AS val FROM jvm_memory_used WHERE $timeFilter AND area = 'nonheap' AND \"service.name\" =~ /^$service/ GROUP BY time($__interval),*) GROUP BY time($__interval) fill(previous)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -1795,7 +1795,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1925,7 +1925,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -1937,7 +1937,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -2051,7 +2051,7 @@
           "measurement": "jvm_gc_pause",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\") FROM \"jvm_gc_pause\" WHERE (\"service\" =~ /^$service$/ AND \"action\" = 'end of minor GC') AND $timeFilter GROUP BY time($__interval) fill(none)",
+          "query": "SELECT SUM(\"counter\") FROM \"jvm_gc_pause\" WHERE (\"service.name\" =~ /^$service$/ AND \"action\" = 'end of minor GC') AND $timeFilter GROUP BY time($__interval) fill(none)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -2105,7 +2105,7 @@
           "measurement": "jvm_gc_pause",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(\"counter\") FROM \"jvm_gc_pause\" WHERE (\"service\" =~ /^$service$/ AND \"action\" = 'end of major GC') AND $timeFilter GROUP BY time($__interval) fill(none)",
+          "query": "SELECT SUM(\"counter\") FROM \"jvm_gc_pause\" WHERE (\"service.name\" =~ /^$service$/ AND \"action\" = 'end of major GC') AND $timeFilter GROUP BY time($__interval) fill(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2147,7 +2147,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -2241,7 +2241,7 @@
           ],
           "tags": [
             {
-              "key": "service",
+              "key": "service.name::tag",
               "operator": "=~",
               "value": "/^$service$/"
             }
@@ -2293,7 +2293,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "LocalInflux",
           "value": "P91175AC4AE38585B"
         },
@@ -2324,13 +2324,16 @@
           "type": "influxdb",
           "uid": "P91175AC4AE38585B"
         },
-        "definition": "SHOW TAG VALUES WITH KEY=\"service\"",
+        "definition": "SHOW TAG VALUES WITH KEY=\"service.name\"",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "service",
         "options": [],
-        "query": "SHOW TAG VALUES WITH KEY=\"service\"",
+        "query": {
+          "query": "SHOW TAG VALUES WITH KEY=\"service.name\"",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -2374,6 +2377,6 @@
   "timezone": "",
   "title": "JVM Metrics",
   "uid": "jaEIHn8ik",
-  "version": 5,
+  "version": 3,
   "weekStart": ""
 }

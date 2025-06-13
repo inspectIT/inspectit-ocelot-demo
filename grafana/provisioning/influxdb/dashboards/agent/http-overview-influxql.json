@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 6,
   "links": [],
   "panels": [
     {
@@ -51,7 +51,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -260,7 +260,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(total) as za_requests, SUM(times) / SUM(total) AS zb_response_time FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"sum\") AS times FROM \"http_in_responsetime\" \n  WHERE $timeFilter AND service =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path\n) GROUP BY http_path",
+          "query": "SELECT  SUM(total) as za_requests, SUM(times) / SUM(total) AS zb_response_time FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"sum\") AS times FROM \"http_in_responsetime\" \n  WHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path\n) GROUP BY http_path",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -301,7 +301,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(errors) / SUM(total) AS zc_error_rate FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_in_error\" \n  WHERE $timeFilter AND service =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path fill(0)\n)\nGROUP BY http_path",
+          "query": "SELECT  SUM(errors) / SUM(total) AS zc_error_rate FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_in_error\" \n  WHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path fill(0)\n)\nGROUP BY http_path",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "table",
@@ -346,7 +346,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -457,7 +457,7 @@
           "legendFormat": "{{http_path}}",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(sum) / SUM(count)\nFROM \"http_in_responsetime\" \nWHERE $timeFilter AND service =~ /^$service$/  AND http_path=~ /^$path$/\nGROUP BY time($__interval), http_path fill(none)",
+          "query": "SELECT  SUM(sum) / SUM(count)\nFROM \"http_in_responsetime\" \nWHERE $timeFilter AND \"service.name\" =~ /^$service$/  AND http_path=~ /^$path$/\nGROUP BY time($__interval), http_path fill(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -483,7 +483,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -577,7 +577,7 @@
           "intervalFactor": 1,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(count)/$__interval_ms*1000 AS value\nFROM \"http_in_responsetime\" \nWHERE $timeFilter AND service =~ /^$service$/  AND http_path=~ /^$path$/ \nGROUP BY time($__interval) fill(0)",
+          "query": "SELECT  SUM(count)/$__interval_ms*1000 AS value\nFROM \"http_in_responsetime\" \nWHERE $timeFilter AND \"service.name\" =~ /^$service$/  AND http_path=~ /^$path$/ \nGROUP BY time($__interval) fill(0)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -603,7 +603,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -700,7 +700,7 @@
           "intervalFactor": 1,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(errors) / SUM(total) AS value FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_in_error\" \n  WHERE $timeFilter AND service =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY time($__interval) fill(0)\n)\nWHERE total > 0\nGROUP BY time($__interval)",
+          "query": "SELECT  SUM(errors) / SUM(total) AS value FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_in_error\" \n  WHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY time($__interval) fill(0)\n)\nWHERE total > 0\nGROUP BY time($__interval)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -726,7 +726,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -963,7 +963,7 @@
           "legendFormat": "",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(total) as za_requests, SUM(times) / SUM(total) AS zb_response_time FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"sum\") AS times FROM \"http_out_responsetime\" \n  WHERE $timeFilter AND service =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path,http_host\n) GROUP BY *",
+          "query": "SELECT  SUM(total) as za_requests, SUM(times) / SUM(total) AS zb_response_time FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"sum\") AS times FROM \"http_out_responsetime\" \n  WHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path,http_host\n) GROUP BY *",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -1004,7 +1004,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(errors) / SUM(total) AS zc_error_rate FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_out_error\" \n  WHERE $timeFilter AND service =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path,http_host fill(0)\n)\nGROUP BY *",
+          "query": "SELECT  SUM(errors) / SUM(total) AS zc_error_rate FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_out_error\" \n  WHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY http_path,http_host fill(0)\n)\nGROUP BY *",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "table",
@@ -1049,7 +1049,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1155,7 +1155,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(sum) / SUM(count) AS value \nFROM \"http_out_responsetime\" \nWHERE $timeFilter AND service =~ /^$service$/  AND http_path=~ /^$path$/\nGROUP BY time($__interval), http_path,http_host fill(none)",
+          "query": "SELECT  SUM(sum) / SUM(count) AS value \nFROM \"http_out_responsetime\" \nWHERE $timeFilter AND \"service.name\" =~ /^$service$/  AND http_path=~ /^$path$/\nGROUP BY time($__interval), http_path,http_host fill(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1181,7 +1181,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1275,7 +1275,7 @@
           "intervalFactor": 1,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(count)/$__interval_ms*1000 AS value\nFROM \"http_out_responsetime\" \nWHERE $timeFilter AND service =~ /^$service$/ AND http_path=~ /^$path$/ \nGROUP BY time($__interval) fill(0)",
+          "query": "SELECT  SUM(count)/$__interval_ms*1000 AS value\nFROM \"http_out_responsetime\" \nWHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path=~ /^$path$/ \nGROUP BY time($__interval) fill(0)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1301,7 +1301,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -1398,7 +1398,7 @@
           "intervalFactor": 1,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  SUM(errors) / SUM(total) AS value FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_out_error\" \n  WHERE $timeFilter AND service =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY time($__interval) fill(0)\n)\nWHERE total > 0\nGROUP BY time($__interval)",
+          "query": "SELECT  SUM(errors) / SUM(total) AS value FROM (\n  SELECT SUM(\"count\") AS total, SUM(\"errorcount\") AS errors FROM \"http_out_error\" \n  WHERE $timeFilter AND \"service.name\" =~ /^$service$/ AND http_path =~ /^$path$/  GROUP BY time($__interval) fill(0)\n)\nWHERE total > 0\nGROUP BY time($__interval)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1461,14 +1461,17 @@
           "type": "influxdb",
           "uid": "P91175AC4AE38585B"
         },
-        "definition": "SHOW TAG VALUES WITH key = \"service\"",
+        "definition": "SHOW TAG VALUES WITH key = \"service.name\"",
         "hide": 0,
         "includeAll": true,
         "label": "Service",
         "multi": true,
         "name": "service",
         "options": [],
-        "query": "SHOW TAG VALUES WITH key = \"service\"",
+        "query": {
+          "query": "SHOW TAG VALUES WITH key = \"service.name\"",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
