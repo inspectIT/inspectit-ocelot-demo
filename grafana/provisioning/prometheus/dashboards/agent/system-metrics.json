@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -49,7 +50,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -123,7 +124,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "system_cpu_usage_cores{host=\"$host\"}",
+          "expr": "system_cpu_usage_cores{host_name=\"$host\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -170,7 +171,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -314,7 +315,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "system_cpu_usage_cores{host=\"$host\"}",
+          "expr": "system_cpu_usage_cores{host_name=\"$host\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -368,7 +369,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "system_load_average_1m_percentage{host=\"$host\"}",
+          "expr": "system_load_average_1m_percentage{host_name=\"$host\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -420,7 +421,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -494,7 +495,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(disk_total_bytes{host=\"$host\"} - disk_free_bytes{host=\"$host\"})/disk_total_bytes{host=\"$host\"}",
+          "expr": "(disk_bytes{host_name=\"$host\"} - disk_free_bytes{host_name=\"$host\"})/disk_bytes{host_name=\"$host\"}",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -507,7 +508,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -669,7 +670,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "disk_total_bytes{host=\"$host\"} - disk_free_bytes{host=\"$host\"}",
+          "expr": "disk_bytes{host_name=\"$host\"} - disk_free_bytes{host_name=\"$host\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "disk_used",
@@ -683,7 +684,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "disk_free_bytes{host=\"$host\"}",
+          "expr": "disk_free_bytes{host_name=\"$host\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "disk_free",
@@ -697,7 +698,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -764,7 +765,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "system_cpu_count_cores{host=\"$host\"}",
+          "expr": "system_cpu_count_cores{host_name=\"$host\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -816,7 +817,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -887,7 +888,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "disk_free_bytes{host=\"$host\"}",
+          "expr": "disk_free_bytes{host_name=\"$host\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -945,7 +946,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "LocalPrometheus",
           "value": "P93B0DC4442ABD976"
         },
@@ -956,6 +957,7 @@
         "name": "datasource",
         "options": [],
         "query": "prometheus",
+        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -963,7 +965,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -971,13 +973,17 @@
           "type": "prometheus",
           "uid": "P93B0DC4442ABD976"
         },
-        "definition": "label_values(host)",
+        "definition": "label_values(host_name)",
         "hide": 0,
         "includeAll": true,
         "multi": false,
         "name": "host",
         "options": [],
-        "query": "label_values(host)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(host_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1021,6 +1027,6 @@
   "timezone": "",
   "title": "System Metrics",
   "uid": "skfGrta43Ae2",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

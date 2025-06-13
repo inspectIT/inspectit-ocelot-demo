@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
+  "id": 3,
   "links": [],
   "panels": [
     {
@@ -50,7 +50,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -154,7 +154,7 @@
           ],
           "tags": [
             {
-              "key": "host",
+              "key": "host.name::tag",
               "operator": "=~",
               "value": "/^$host$/"
             }
@@ -166,7 +166,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -345,7 +345,7 @@
           ],
           "tags": [
             {
-              "key": "host",
+              "key": "host.name::tag",
               "operator": "=~",
               "value": "/^$host$/"
             }
@@ -392,7 +392,7 @@
           ],
           "tags": [
             {
-              "key": "host",
+              "key": "host.name::tag",
               "operator": "=~",
               "value": "/^$host$/"
             }
@@ -404,7 +404,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -494,7 +494,7 @@
           "measurement": "disk_usage",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT 1 - last(\"free\") /  last(\"total\") FROM \"disk_usage\" WHERE (\"host\" =~ /^$host$/) AND $timeFilter",
+          "query": "SELECT 1 - last(\"free\") /  last(\"total\") FROM \"disk_usage\" WHERE (\"host.name\" =~ /^$host$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -526,7 +526,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -680,7 +680,7 @@
           ],
           "tags": [
             {
-              "key": "host",
+              "key": "host.name::tag",
               "operator": "=~",
               "value": "/^$host$/"
             }
@@ -709,7 +709,7 @@
           "measurement": "disk_usage",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"total\")- mean(free) FROM \"disk_usage\" WHERE (\"host\" =~ /^$host$/) AND $timeFilter GROUP BY time($__interval) fill(linear)",
+          "query": "SELECT mean(\"total\")- mean(free) FROM \"disk_usage\" WHERE (\"host.name\" =~ /^$host$/) AND $timeFilter GROUP BY time($__interval) fill(linear)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -741,7 +741,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -830,7 +830,7 @@
           ],
           "tags": [
             {
-              "key": "host",
+              "key": "host.name::tag",
               "operator": "=~",
               "value": "/^$host$/"
             }
@@ -842,7 +842,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "influxdb",
         "uid": "${datasource}"
       },
@@ -935,7 +935,7 @@
           ],
           "tags": [
             {
-              "key": "host",
+              "key": "host.name::tag",
               "operator": "=~",
               "value": "/^$host$/"
             }
@@ -953,7 +953,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "LocalInflux",
           "value": "P91175AC4AE38585B"
         },
@@ -984,13 +984,16 @@
           "type": "influxdb",
           "uid": "P91175AC4AE38585B"
         },
-        "definition": "SHOW TAG VALUES WITH KEY = \"host\"",
+        "definition": "SHOW TAG VALUES WITH KEY = \"host.name\"",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "host",
         "options": [],
-        "query": "SHOW TAG VALUES WITH KEY = \"host\"",
+        "query": {
+          "query": "SHOW TAG VALUES WITH KEY = \"host.name\"",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,

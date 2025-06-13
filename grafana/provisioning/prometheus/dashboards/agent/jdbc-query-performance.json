@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -148,7 +148,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
+          "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service_name=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service_name=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
           "interval": "",
           "legendFormat": "{{$sql_command}}",
           "range": true,
@@ -160,7 +160,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -249,7 +249,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
+          "expr": "(sum(increase(jdbc_query_duration_sum_milliseconds_total{service_name=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)\n/ sum(increase(jdbc_query_duration_count_total{service_name=~\"$service\",jdbc_url=~\"$db_url\",sql_command=~\"$command\"}[$__interval])) by (sql_command)) >= 0",
           "interval": "",
           "legendFormat": "{{sql_command}}",
           "range": true,
@@ -267,7 +267,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "LocalPrometheus",
           "value": "P93B0DC4442ABD976"
         },
@@ -315,22 +315,30 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "prometheus",
           "uid": "P93B0DC4442ABD976"
         },
-        "definition": "label_values(jdbc_query_duration_sum, service)",
+        "definition": "label_values(jdbc_query_duration_sum,service_name)",
         "hide": 0,
         "includeAll": true,
         "label": "Calling Service",
         "multi": true,
         "name": "service",
         "options": [],
-        "query": "label_values(jdbc_query_duration_sum, service)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(jdbc_query_duration_sum,service_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
