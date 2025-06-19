@@ -302,8 +302,7 @@ services:
   #  Load Generator
   ## Artificial load on demo
   load:
-    build:
-      context: load
+    image: inspectit/spring-petclinic-load:${INSPECTIT_LOAD_VERSION}
     container_name: load-generator
     restart: always
     environment:

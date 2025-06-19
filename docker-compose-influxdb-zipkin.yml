@@ -285,9 +285,7 @@ services:
   #  Load Generator
   ## Artificial load on demo
   load:
-    build:
-      context: load
-    container_name: load-generator
+    image: inspectit/spring-petclinic-load:${INSPECTIT_LOAD_VERSION}
     restart: always
     environment:
       - LOCUST_WEB_PORT
