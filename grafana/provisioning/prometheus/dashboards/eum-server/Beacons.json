@@ -18,12 +18,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 8,
   "links": [],
   "panels": [
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -39,10 +39,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -83,10 +79,10 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "inspectit_eum_self_beacons_received_count",
-          "instant": false,
+          "expr": "sum(inspectit_eum_self_beacons_received_amount_total)",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -95,7 +91,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -114,7 +110,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 50
               }
             ]
           },
@@ -153,7 +149,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(sum_over_time(inspectit_eum_self_beacons_processor_duration_sum[$__interval]) / sum_over_time(inspectit_eum_self_beacons_processor_count[$__interval]))",
+          "expr": "avg(rate(inspectit_eum_self_beacons_processor_amount_sum[$__rate_interval]) / rate(inspectit_eum_self_beacons_processor_amount_count[$__rate_interval]))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -177,7 +173,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -264,7 +260,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg_over_time(inspectit_eum_self_beacons_processor_duration_sum[$__interval]) / avg_over_time(inspectit_eum_self_beacons_processor_count[$__interval])",
+          "expr": "rate(inspectit_eum_self_beacons_processor_amount_sum[$__rate_interval]) / rate(inspectit_eum_self_beacons_processor_amount_count[$__rate_interval])",
           "instant": false,
           "legendFormat": "{{beacon_processor}}",
           "range": true,
@@ -276,7 +272,7 @@
     },
     {
       "datasource": {
-        "name": "${datasource}",
+        "default": false,
         "type": "prometheus",
         "uid": "${datasource}"
       },
@@ -353,7 +349,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "avg_over_time(inspectit_eum_self_beacons_processor_duration_sum[$__interval]) / avg_over_time(inspectit_eum_self_beacons_processor_count[$__interval])",
+          "expr": "rate(inspectit_eum_self_beacons_processor_amount_sum[$__rate_interval]) / rate(inspectit_eum_self_beacons_processor_amount_count[$__rate_interval])",
           "instant": false,
           "legendFormat": "{{beacon_processor}}",
           "range": true,
@@ -434,7 +430,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Beacons",
-  "uid": "f6YQCSqGk",
-  "version": 3,
+  "uid": "f5ZQCSqGk",
+  "version": 9,
   "weekStart": ""
 }
