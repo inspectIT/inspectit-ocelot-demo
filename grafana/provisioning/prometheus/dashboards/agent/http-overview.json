@@ -254,7 +254,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0",
+          "expr": "sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -268,7 +268,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_in_responsetime_sum_milliseconds_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0",
+          "expr": "sum(increase(http_in_responsetime_milliseconds_sum{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -282,7 +282,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(http_in_count_ratio_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path)) >= 0\nor (sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0) * 0",
+          "expr": "(sum(increase(http_in_responsetime_milliseconds_count{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path)) >= 0\nor (sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) > 0) * 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -393,7 +393,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(http_in_responsetime_sum_milliseconds_total{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_path)\n/ sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_path)) >= 0",
+          "expr": "(sum(increase(http_in_responsetime_milliseconds_sum{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_path)\n/ sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_path)) >= 0",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -481,7 +481,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__interval]))",
+          "expr": "sum(rate(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__interval]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -573,7 +573,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(http_in_count_ratio_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_in_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) > 0) * 0",
+          "expr": "(sum(increase(http_in_responsetime_milliseconds_count{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_in_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) > 0) * 0",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -838,7 +838,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(label_join(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range]), \"http_url\", \"\", \"http_host\", \"http_path\")) by (http_url) > 0",
+          "expr": "sum(label_join(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range]), \"http_url\", \"\", \"http_host\", \"http_path\")) by (http_url) > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -852,7 +852,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "label_join(sum(increase(http_out_responsetime_sum_milliseconds_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) \n/ sum(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) > 0, \"http_url\", \"\", \"http_host\", \"http_path\")",
+          "expr": "label_join(sum(increase(http_out_responsetime_milliseconds_sum{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) \n/ sum(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) > 0, \"http_url\", \"\", \"http_host\", \"http_path\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -867,7 +867,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "label_join((sum(increase(http_out_count_ratio_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path)) >= 0\nor (sum(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) > 0) * 0 , \"http_url\", \"\", \"http_host\", \"http_path\")",
+          "expr": "label_join((sum(increase(http_out_responsetime_milliseconds_count{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_path) \n/ sum(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path)) >= 0\nor (sum(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) by (http_host,http_path) > 0) * 0 , \"http_url\", \"\", \"http_host\", \"http_path\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -982,7 +982,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(http_out_responsetime_sum_milliseconds_total{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_host,http_path)\n/ sum(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_host,http_path)) >= 0",
+          "expr": "(sum(increase(http_out_responsetime_milliseconds_sum{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_host,http_path)\n/ sum(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__interval])) by (http_host,http_path)) >= 0",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1070,7 +1070,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__interval]))",
+          "expr": "sum(rate(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__interval]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1162,7 +1162,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(sum(increase(http_out_count_ratio_total{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_out_count_ratio_total{service_name=\"$service\",http_path=~\"$path\"}[$__range])) > 0) * 0",
+          "expr": "(sum(increase(http_out_responsetime_milliseconds_count{http_status!~\"(1|2|3)\\\\d\\\\d\",service_name=\"$service\",http_path=~\"$path\"}[$__range]))\n/ sum(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) >= 0)\nor (sum(increase(http_out_responsetime_milliseconds_count{service_name=\"$service\",http_path=~\"$path\"}[$__range])) > 0) * 0",
           "format": "time_series",
           "instant": true,
           "interval": "",
